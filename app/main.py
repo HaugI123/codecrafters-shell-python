@@ -36,7 +36,7 @@ def main():
             path = command[3:]
             try:
                 if path.startswith('~'):
-                    os.chdir(os.environ['HOME'])
+                    os.chdir(os.getenv('HOME'))
                     break
                 os.chdir(path)
             except FileNotFoundError:
