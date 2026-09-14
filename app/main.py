@@ -16,20 +16,21 @@ def main():
         elif command.startswith('echo'):
             sys.stdout.write(f'{command[5:]}\n')
         elif command.startswith('type'):
-            command = command[5:]
-            if command in builtIns:
-                sys.stdout.write(f'{command} is a shell builtin\n')
+            if command[5:] in builtIns:
+                sys.stdout.write(f'{command[5:]} is a shell builtin\n')
                 break
-            elif command not in builtIns:
+            elif command[5:] not in builtIns:
                 for path in paths:
-                    if command in path and os.access(f'{path}/{command}', os.X_OK):
-                        sys.stdout.write(f'{command} is {path}/{command}')
-                    elif command in path and not os.access(f'{path}/{command}', os.X_OK):
+                    if command[5:] in path and os.access(f'{path}/{command[5:]}', os.X_OK):
+                        sys.stdout.write(f'{command[5:]} is {path}/{command[5:]}')
+                    elif command[5:] in path and not os.access(f'{path}/{command{5:}}', os.X_OK):
                         continue
             else:
-                sys.stdout.write(f'{command}: not found\n')
+                sys.stdout.write(f'{command[5:]}: not found\n')
         else:
             sys.stdout.write(f'{command}: command not found\n')
+
+
 
     pass
 
