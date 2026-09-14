@@ -22,9 +22,9 @@ def main():
                 break
             elif command not in builtIns:
                 for path in paths:
-                    if command in path & os.access(f'{path}/{command}', os.X_OK):
+                    if command in path and os.access(f'{path}/{command}', os.X_OK):
                         sys.stdout.write(f'{command} is {path}/{command}')
-                    elif command in path & not os.access(f'{path}/{command}', os.X_OK):
+                    elif command in path and not os.access(f'{path}/{command}', os.X_OK):
                         continue
             else:
                 sys.stdout.write(f'{command}: not found\n')
