@@ -19,7 +19,7 @@ def main():
                 if command[5:] == word:
                     sys.stdout.write(f'{word} is a shell builtin\n')
                 else:
-                    continue
+                    sys.stdout.write(f'{command[5:]}: not found')
         else:
             sys.stdout.write(f'{command}: command not found\n')
 
