@@ -3,11 +3,12 @@ import sys
 
 def main():
     # TODO: Uncomment the code below to pass the first stage
-    sys.stdout.write("$ ")
+    while True:
+        sys.stdout.write("$ ")
 
-    command = input("")
+        command = input("")
 
-    sys.stdout.write(f'{command}: command not found')
+        sys.stdout.write(f'{command}: command not found')
 
     pass
 
