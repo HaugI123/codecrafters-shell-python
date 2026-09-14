@@ -35,13 +35,13 @@ def main():
                     cmdList = command.split(" ")
 
                     fileName = os.path.join(path, cmdList[0])
+                    found = False
 
                     if os.path.isfile(fileName) and os.access(fileName, os.X_OK):
                         os.system(command)
-
-        else:
-            sys.stdout.write(f'{command}: command not found\n')
-
+                        found = True
+            if not found:
+                sys.stdout.write(f'{command}: command not found\n')
 
 
     pass
