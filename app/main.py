@@ -15,11 +15,10 @@ def main():
         elif command.startswith('echo'):
             sys.stdout.write(f'{command[5:]}\n')
         elif command.startswith('type'):
-            for word in builtIns:
-                if command[5:] == word:
-                    sys.stdout.write(f'{word} is a shell builtin\n')
-                else:
-                    sys.stdout.write(f'{command[5:]}: not found')
+            if builtIns.find(command[5:]):
+                sys.stdout.write(f'{word} is a shell builtin\n')
+            else:
+                sys.stdout.write(f'{command[5:]}: not found\n')
         else:
             sys.stdout.write(f'{command}: command not found\n')
 
