@@ -22,11 +22,10 @@ def main():
             elif command[5:] not in builtIns:
                 try:
                     for path in paths:
-                        if command[5:] in os.listdir(path) and os.access(f'{path}/{command[5:]}', os.X_OK):
-                            print('made it here')
-                            sys.stdout.write(f'{command[5:]} is {path}/{command[5:]}')
-                        elif command[5:] in os.listdir(path) and not os.access(f'{path}/{command[5:]}', os.X_OK):
-                            continue
+                        fileName = os.path.join(path, command[5:])
+
+                        if os.path.isfile(fileName) and os.access(fileName, os.X_OK):
+                            sys.stdout.write(f'{command[5:]} is {fileName}\n')
                 except FileNotFoundError:
                     continue
             else:
