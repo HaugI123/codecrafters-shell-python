@@ -37,7 +37,7 @@ def main():
             try:
                 os.chdir(path)
             except FileNotFoundError:
-                sys.stdout.write(f'cd: {path}: No such file or directory')
+                sys.stdout.write(f'cd: {path}: No such file or directory\n')
         elif command not in builtIns:
             found = False
             for path in paths:
