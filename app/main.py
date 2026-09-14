@@ -32,6 +32,12 @@ def main():
                     sys.stdout.write(f'{command[5:]}: not found\n')
         elif command.startswith('pwd'):
             sys.stdout.write(f'{os.getcwd()}\n')
+        elif command.startswith('cd'):
+            path = command[3:]
+            try:
+                os.chdir(path)
+            except FileNotFoundError:
+                sys.stdout.write(f'cd: {path}: No such file or directory')
         elif command not in builtIns:
             found = False
             for path in paths:
