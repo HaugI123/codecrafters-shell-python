@@ -8,7 +8,7 @@ def main():
 
         command = input("")
 
-        sys.stdout.write(f'{command}: command not found')
+        sys.stdout.write(f'{command}: command not found\n')
 
     pass
 
