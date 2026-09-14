@@ -31,7 +31,7 @@ def main():
                 if not found:
                     sys.stdout.write(f'{command[5:]}: not found\n')
         elif command.startswith('pwd'):
-            sys.stdout.write(os.pwd)
+            sys.stdout.write(os.getcwd())
         elif command not in builtIns:
             found = False
             for path in paths:
