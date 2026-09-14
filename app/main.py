@@ -26,9 +26,10 @@ def main():
 
                         if os.path.isfile(fileName) and os.access(fileName, os.X_OK):
                             sys.stdout.write(f'{command[5:]} is {fileName}\n')
+                            continue
+                    sys.stdout.write(f'{command[5:]}: not found')
 
                 except:
-                    sys.stdout.write(f'{command[5:]}: not found\n')
                     continue
         else:
             sys.stdout.write(f'{command}: command not found\n')
