@@ -2,7 +2,9 @@ import sys
 
 
 def main():
-    # TODO: Uncomment the code below to pass the first stage
+
+    builtIns = ['type', 'exit', 'echo']
+
     while True:
         sys.stdout.write("$ ")
 
@@ -12,6 +14,12 @@ def main():
             break
         elif command.startswith('echo'):
             sys.stdout.write(f'{command[5:]}\n')
+        elif command.startswith('type'):
+            for word in builtIns:
+                if command[5:] == word:
+                    sys.stdout.write(f'{word} is a shell builtin\n')
+                else:
+                    continue
         else:
             sys.stdout.write(f'{command}: command not found\n')
 
