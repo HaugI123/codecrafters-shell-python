@@ -20,15 +20,20 @@ def main():
                 sys.stdout.write(f'{command[5:]} is a shell builtin\n')
                 break
             elif command[5:] not in builtIns:
+                found = False
                 for path in paths:
                     fileName = os.path.join(path, command[5:])
 
                     if os.path.isfile(fileName) and os.access(fileName, os.X_OK):
                         sys.stdout.write(f'{command[5:]} is {fileName}\n')
+                        found = True
+                        break
                     elif os.path.isfile(fileName) and not os.access(fileName, os.X_OK):
                         continue
-                    else:
-                        sys.stdout.write(f'{command[5:]}: not found\n')
+                if not found:
+                    sys.stdout.write(f'{command[5:]}: not found\n')
+
+
         else:
             sys.stdout.write(f'{command}: command not found\n')
 
