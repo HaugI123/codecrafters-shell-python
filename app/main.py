@@ -37,7 +37,7 @@ def main():
             try:
                 os.chdir(path)
                 if path.startswith('~'):
-                    os.chdir(os.environ['HOME']
+                    os.chdir(os.environ['HOME'])
             except FileNotFoundError:
                 sys.stdout.write(f'cd: {path}: No such file or directory\n')
         elif command not in builtIns:
