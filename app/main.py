@@ -18,7 +18,6 @@ def main():
         elif command.startswith('type'):
             if command[5:] in builtIns:
                 sys.stdout.write(f'{command[5:]} is a shell builtin\n')
-                break
             elif command[5:] not in builtIns:
                 found = False
                 for path in paths:
@@ -27,7 +26,6 @@ def main():
                     if os.path.isfile(fileName) and os.access(fileName, os.X_OK):
                         sys.stdout.write(f'{command[5:]} is {fileName}\n')
                         found = True
-                        break
                     elif os.path.isfile(fileName) and not os.access(fileName, os.X_OK):
                         continue
                 if not found:
