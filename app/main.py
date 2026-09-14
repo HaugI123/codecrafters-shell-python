@@ -17,6 +17,7 @@ def main():
         elif command.startswith('type'):
             if command[5:] in builtIns:
                 sys.stdout.write(f'{command[5:]} is a shell builtin\n')
+                break
             else:
                 sys.stdout.write(f'{command[5:]}: not found\n')
         else:
