@@ -30,7 +30,14 @@ def main():
                         continue
                 if not found:
                     sys.stdout.write(f'{command[5:]}: not found\n')
+        elif command not in builtIns:
+            for path in paths:
+                    cmdList = command.split(" ")
 
+                    fileName = os.path.join(path, cmdList[0])
+
+                    if os.path.isfile(fileName) and os.access(fileName, os.X_OK):
+                        os.system(command)
 
         else:
             sys.stdout.write(f'{command}: command not found\n')
