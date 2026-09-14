@@ -3,7 +3,7 @@ import os
 
 def main():
 
-    builtIns = ['type', 'exit', 'echo']
+    builtIns = ['type', 'exit', 'echo', 'pwd']
 
     while True:
         sys.stdout.write("$ ")
@@ -30,6 +30,8 @@ def main():
                         continue
                 if not found:
                     sys.stdout.write(f'{command[5:]}: not found\n')
+        elif command.startswith('pwd'):
+            sys.stdout.write(os.pwd())
         elif command not in builtIns:
             found = False
             for path in paths:
