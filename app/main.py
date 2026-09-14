@@ -23,7 +23,7 @@ def main():
                 for path in paths:
                     if command[5:] in path and os.access(f'{path}/{command[5:]}', os.X_OK):
                         sys.stdout.write(f'{command[5:]} is {path}/{command[5:]}')
-                    elif command[5:] in path and not os.access(f'{path}/{command{5:}}', os.X_OK):
+                    elif command[5:] in path and not os.access(f'{path}/{command[5:]}', os.X_OK):
                         continue
             else:
                 sys.stdout.write(f'{command[5:]}: not found\n')
