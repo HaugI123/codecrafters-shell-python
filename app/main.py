@@ -10,10 +10,8 @@ def main():
 
         if command == 'exit':
             break
-
-        else if command.startswith('echo'):
+        elif command.startswith('echo'):
             sys.stdout.write(f'{command[4:]}')
-
         else:
             sys.stdout.write(f'{command}: command not found\n')
 
