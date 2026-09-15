@@ -9,7 +9,7 @@ def main():
     while True:
         sys.stdout.write("$ ")
 
-        command = input("").strip()
+        command = input("")
         command = re.sub("  *", " ", command) if not "'" in command else re.sub("'", "", command)
         paths = os.environ['PATH'].split(':')
 
@@ -42,7 +42,7 @@ def main():
                     continue
                 os.chdir(path)
             except FileNotFoundError:
-                sys.stdout.write(f'cd: {path}: No such file or directory testing\n')
+                sys.stdout.write(f'cd: {path}: No such file or directory\n')
         elif command not in builtIns:
             found = False
             for path in paths:
