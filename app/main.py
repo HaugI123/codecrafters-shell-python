@@ -11,12 +11,12 @@ def main():
 
         command = input("")
         cmdName = command.split(" ")[0]
-        command = re.sub("  *", " ", command) if not "'" in command else re.sub("'", "", command)
         paths = os.environ['PATH'].split(':')
 
         if cmdName == 'exit':
             break
         elif cmdName == 'echo':
+            command = re.sub("  *", " ", command) if not "'" in command else re.sub("'", "", command)
             sys.stdout.write(f'{command[5:]}\n')
         elif cmdName == 'type':
             if command[5:] in builtIns:
