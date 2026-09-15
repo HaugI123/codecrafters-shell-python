@@ -53,6 +53,7 @@ def main():
                     if os.path.isfile(fileName) and os.access(fileName, os.X_OK):
                         os.system(command)
                         found = True
+                        break
             if not found:
                 sys.stdout.write(f'{command}: command not found\n')
 
