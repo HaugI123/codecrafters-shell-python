@@ -1,5 +1,6 @@
 import sys
 import os
+import re
 
 def main():
 
@@ -9,6 +10,7 @@ def main():
         sys.stdout.write("$ ")
 
         command = input("")
+        command = re.sub("'", "", command)
         paths = os.environ['PATH'].split(':')
 
         if command == 'exit':
