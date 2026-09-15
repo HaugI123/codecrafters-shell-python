@@ -10,13 +10,13 @@ def main():
         sys.stdout.write("$ ")
 
         command = input("").strip()
-        command = re.sub("'", "", command)
+        command = re.sub("  *", " ", command) if not command.find("'") else re.sub("'", "", command)
         paths = os.environ['PATH'].split(':')
 
         if command == 'exit':
             break
         elif command.startswith('echo'):
-            sys.stdout.write(f'{re.sub("  *", " ",command[5:])}\n')
+            sys.stdout.write(f'{command[5:]}\n')
         elif command.startswith('type'):
             if command[5:] in builtIns:
                 sys.stdout.write(f'{command[5:]} is a shell builtin\n')
