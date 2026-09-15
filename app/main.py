@@ -4,7 +4,7 @@ import re
 
 def main():
 
-    builtIns = ['type', 'exit', 'echo', 'pwd', 'cat']
+    builtIns = ['type', 'exit', 'echo', 'pwd']
 
     while True:
         sys.stdout.write("$ ")
