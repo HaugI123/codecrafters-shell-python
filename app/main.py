@@ -46,9 +46,8 @@ def main():
                 sys.stdout.write(f'cd: {path}: No such file or directory\n')
         elif cmdName not in builtIns:
             found = False
+            cmdList = command.split(" ")
             for path in paths:
-                    cmdList = command.split(" ")
-
                     fileName = os.path.join(path, cmdList[0])
 
                     if os.path.isfile(fileName) and os.access(fileName, os.X_OK):
