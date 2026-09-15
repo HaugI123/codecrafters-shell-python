@@ -11,7 +11,6 @@ def main():
 
         command = input("").strip()
         command = re.sub("'", "", command)
-        command = re.sub(" *", " ", command)
         paths = os.environ['PATH'].split(':')
 
         if command == 'exit':
