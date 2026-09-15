@@ -10,7 +10,7 @@ def main():
         sys.stdout.write("$ ")
 
         command = input("").strip()
-        command = re.sub("  *", " ", command) if not command.find("'") else re.sub("'", "", command)
+        command = re.sub("  *", " ", command) if not "'" in command else re.sub("'", "", command)
         paths = os.environ['PATH'].split(':')
 
         if command == 'exit':
