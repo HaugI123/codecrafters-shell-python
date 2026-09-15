@@ -16,7 +16,7 @@ def main():
         if command == 'exit':
             break
         elif command.startswith('echo'):
-            sys.stdout.write(f'{command[5:]}\n')
+            sys.stdout.write(f'{re.sub("  *", " ",command[5:])}\n')
         elif command.startswith('type'):
             if command[5:] in builtIns:
                 sys.stdout.write(f'{command[5:]} is a shell builtin\n')
