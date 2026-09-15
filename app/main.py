@@ -4,7 +4,7 @@ import re
 
 def main():
 
-    builtIns = ['type', 'exit', 'echo', 'pwd']
+    builtIns = ['type', 'exit', 'echo', 'pwd', 'cat']
 
     while True:
         sys.stdout.write("$ ")
@@ -42,7 +42,7 @@ def main():
                     continue
                 os.chdir(path)
             except FileNotFoundError:
-                sys.stdout.write(f'cd: {path}: No such file or directory\n')
+                sys.stdout.write(f'cd: {path}: No such file or directory testing\n')
         elif command not in builtIns:
             found = False
             for path in paths:
