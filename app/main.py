@@ -48,9 +48,9 @@ def myParser(arg):
                     tempStr += chr(39)
                 case 34:
                     tempStr += chr(34)
-                case 65 <= ord(nextChar) <= 90:
+                case num if 65 <= num <= 90:
                     tempStr += nextChar
-                case 97 <= ord(nextChar) <= 122:
+                case num if 97 <= num <= 122:
                     tempStr += nextChar
                 case _:
                     continue
