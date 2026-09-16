@@ -36,10 +36,11 @@ def myParser(arg):
             continue
 
         if ord(char) == 92 and stepChar != '"':
+            nextChar = arg[i+1]
             skip = True
-            tempStr += arg[i+1]
+            tempStr += nextChar
 
-        if ord(char) != 92 or specState and stepChar != '"':
+        if ord(char) != 92 or (specState and stepChar != '"'):
             tempStr += char
 
     if tempStr:
