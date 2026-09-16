@@ -110,7 +110,8 @@ def main():
             case _:
                 sys.stdout.write(f'{cmdName}: command not found\n')
 
-       '''elif cmdName not in builtIns:
+       '''
+        elif cmdName not in builtIns:
             found = False
             cmdList = command.split(" ")
             for path in paths:
