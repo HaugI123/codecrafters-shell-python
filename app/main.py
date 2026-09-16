@@ -38,24 +38,8 @@ def myParser(arg):
         if ord(char) == 92:
             nextChar = arg[i+1]
             skip = True
+            tempStr += nextChar
 
-            match ord(nextChar):
-                case 92:
-                    tempStr += chr(92)
-                case 32:
-                    tempStr += ' '
-                case 39:
-                    tempStr += chr(39)
-                case 34:
-                    tempStr += chr(34)
-                case num if 65 <= num <= 90:
-                    tempStr += nextChar
-                case num if 97 <= num <= 122:
-                    tempStr += nextChar
-                case num if 48 <= num <= 57:
-                    tempStr += nextChar
-                case _:
-                    continue
 
         if ord(char) != 92:
             tempStr += char
