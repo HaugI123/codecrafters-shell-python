@@ -39,7 +39,7 @@ def myParser(arg):
             nextChar = arg[i+1]
             skip = True
 
-            if specState:
+            if specState and stepChar == '"':
 
                 match nextChar:
                     case '"':
