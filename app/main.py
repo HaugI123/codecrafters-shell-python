@@ -72,6 +72,7 @@ def cdFunc(path):
     try:
         if path.startswith('~'):
             os.chdir(os.getenv('HOME'))
+            break
         os.chdir(path)
     except FileNotFoundError:
         sys.stdout.write(f'cd: {path}: No such file or directory\n')
