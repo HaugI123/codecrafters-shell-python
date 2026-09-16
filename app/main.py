@@ -70,7 +70,7 @@ def typeFunc(builtIns, command, paths):
 
 def cdFunc(path):
     try:
-        if path is '~':
+        if path == '~':
             os.chdir(os.getenv('HOME'))
         else:
             os.chdir(path)
