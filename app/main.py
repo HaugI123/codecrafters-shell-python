@@ -71,7 +71,7 @@ def echoFunc(parsed):
         if tempStr and not tempStr.endswith(' '):
             tempStr += ' '
 
-        tempStr += f' {string}'
+        tempStr += string
 
         if i == len(parsed)-1:
             finParsed.append(tempStr.lstrip())
