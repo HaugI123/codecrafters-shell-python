@@ -23,13 +23,29 @@ def myParser(arg):
             specState = False
             continue
 
-        if char == " " and not specState:
+        if char == " " and not specState and char != '\\':
             if tempStr:
                 endList.append(tempStr)
                 tempStr = ''
             continue
 
-        tempStr += char
+        if ord(char) == 92:
+            nextChar = arg[i+1]
+
+            match ord(nextChar):
+                case 92:
+                    tempStr += chr(92)
+                case 32:
+                    tempStr += ' '
+                case 39:
+                    tempStr += chr(39)
+                case 34:
+                    tempStr += chr(34)
+                case _:
+                    continue
+
+        if ord(char) != 92:
+            tempStr += char
 
     if tempStr:
         endList.append(tempStr)
@@ -43,10 +59,20 @@ def echoFunc(parsed):
     finParsed = []
 
     for i, string in enumerate(parsed):
+
         if i == 0:
             finParsed.append(string)
             continue
+
+        if string == ' ':
+            tempStr += string
+            continue
+
+        if tempStr and not tempStr.endswith(' '):
+            tempStr += ' '
+
         tempStr += f' {string}'
+
         if i == len(parsed)-1:
             finParsed.append(tempStr.lstrip())
 
