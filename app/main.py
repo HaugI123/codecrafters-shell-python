@@ -100,7 +100,7 @@ def typeFunc(builtIns, command, paths):
             elif os.path.isfile(fileName) and not os.access(fileName, os.X_OK):
                 continue
         if not found:
-            sys.stdout.write(f'{command}: not found\n')
+            sys.stderr.write(f'{command}: not found\n')
 
 def cdFunc(path):
     try:
@@ -109,7 +109,7 @@ def cdFunc(path):
         else:
             os.chdir(path)
     except FileNotFoundError:
-        sys.stdout.write(f'cd: {path}: No such file or directory\n')
+        sys.stderr.write(f'cd: {path}: No such file or directory\n')
 
 def catFunc(statements):
     subprocess.run(statements)
@@ -124,7 +124,12 @@ def runProg(paths, name, command):
                 found = True
                 break
     if not found:
-        sys.stdout.write(f'{command}: command not found\n')
+        sys.stderr.write(f'{command}: command not found\n')
+
+def redirectFunc(text, fileName):
+    path = f'{os.cwd()}/{fileName}'
+    with open(path, 'a') as f:
+        f.write(text)
 
 def main():
 
