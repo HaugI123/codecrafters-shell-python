@@ -141,7 +141,7 @@ def main():
         command = input("")
         paths = os.environ['PATH'].split(':')
         parsed = myParser(command)
-        cmdName = parsed[0] if ()'>' not in parsed and '1>' not in parsed) else '>'
+        cmdName = parsed[0] if ('>' not in parsed and '1>' not in parsed) else '>'
 
         match cmdName:
             case 'exit':
