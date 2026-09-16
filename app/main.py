@@ -137,7 +137,7 @@ def redirectFunc(redirect, fileName, cmd):
         os.access(path, os.X_OK)
         os.system(command)
     except e:
-        raise Exception(e)
+        print(e, file=sys.stderr)
 
 def main():
 
