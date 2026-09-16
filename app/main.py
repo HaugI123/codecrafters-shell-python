@@ -51,7 +51,7 @@ def myParser(arg):
             tempStr += nextChar
 
 
-        if ord(char) != 92 or specState:
+        if ord(char) != 92 or stepChar == "'":
             tempStr += char
 
     if tempStr:
