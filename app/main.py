@@ -80,6 +80,18 @@ def cdFunc(path):
 def catFunc(statements):
     subprocess.run(statements)
 
+def runProg(paths, name, command):
+    found = False
+    for path in paths:
+            fileName = os.path.join(path, name)
+
+            if os.path.isfile(fileName) and os.access(fileName, os.X_OK):
+                os.system(command)
+                found = True
+                break
+    if not found:
+        sys.stdout.write(f'{command}: command not found\n')
+
 def main():
 
     builtIns = ['type', 'exit', 'echo', 'pwd']
@@ -106,7 +118,7 @@ def main():
             case 'cat':
                 catFunc(parsed)
             case _:
-                sys.stdout.write(f'{cmdName}: command not found\n')
+                runProg(paths, cmdName, command)
 
     pass
 
