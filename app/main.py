@@ -40,7 +40,7 @@ def myParser(arg):
             skip = True
             tempStr += nextChar
 
-        if ord(char) != 92 or (specState and stepChar != '"'):
+        if ord(char) != 92 or (specState and stepChar == '"'):
             tempStr += char
 
     if tempStr:
