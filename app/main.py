@@ -5,6 +5,8 @@ import subprocess
 
 def myParser(arg):
 
+    global skip
+    skip = False
     specState = False
     specChars = ["'", '"']
     stepChar = ''
@@ -13,6 +15,10 @@ def myParser(arg):
     endList = []
 
     for i, char in enumerate(arg):
+
+        if skip:
+            skip = False
+            continue
 
         if char in specChars and not specState:
             specState = True
@@ -31,6 +37,7 @@ def myParser(arg):
 
         if ord(char) == 92:
             nextChar = arg[i+1]
+            skip = True
 
             match ord(nextChar):
                 case 92:
