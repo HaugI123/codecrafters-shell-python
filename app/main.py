@@ -126,13 +126,18 @@ def runProg(paths, name, command):
     if not found:
         sys.stderr.write(f'{command}: command not found\n')
 
-def redirectFunc(textList):
+def redirectFunc(redirect, fileName, cmd):
 
-    fileName = textList[-1]
+    stderrFile = open(fileName, w)
+    sys.stderr = stderrFile
 
-    path = f'{os.cwd()}/{fileName}'
-    with open(path, 'a') as f:
-        f.write(text)
+    try:
+        path = os.path.join(os.cwd(), fileName)
+        os.path.isfile(path)
+        os.access(path, os.X_OK)
+        os.system(command)
+    except e:
+        raise Exception(e)
 
 def main():
 
@@ -145,6 +150,7 @@ def main():
         paths = os.environ['PATH'].split(':')
         parsed = myParser(command)
         cmdName = parsed[0] if ('>' not in parsed and '1>' not in parsed) else '>'
+        cmdName = cmdName if '2>' not in parsed else '2>'
 
         match cmdName:
             case 'exit':
@@ -160,7 +166,9 @@ def main():
             case 'cat':
                 catFunc(parsed)
             case '>':
-                runProg(paths, parsed[0], command)
+                redirectFunc('>', parsed[-1], command)
+            case '2>':
+                redirectFunc('2>', parsed[-1], command)
             case _:
                 runProg(paths, cmdName, command)
 
