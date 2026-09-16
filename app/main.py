@@ -1,7 +1,7 @@
 import sys
 import os
 import re
-
+import subprocess
 
 def myParser(arg):
 
@@ -77,8 +77,7 @@ def cdFunc(path):
         sys.stdout.write(f'cd: {path}: No such file or directory\n')
 
 def catFunc(statements):
-    for line in statements:
-        os.system(f'cat {line}')
+    subprocess.run(statements))
 
 def main():
 
@@ -104,7 +103,7 @@ def main():
             case 'cd':
                 cdFunc(parsed[1])
             case 'cat':
-                catFunc(parsed[1:])
+                catFunc(parsed)
             case _:
                 sys.stdout.write(f'{cmdName}: command not found\n')
 
