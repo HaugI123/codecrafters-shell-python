@@ -77,7 +77,7 @@ def cdFunc(path):
         sys.stdout.write(f'cd: {path}: No such file or directory\n')
 
 def catFunc(statements):
-    subprocess.run(statements))
+    subprocess.run(statements)
 
 def main():
 
