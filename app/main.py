@@ -70,10 +70,10 @@ def typeFunc(builtIns, command, paths):
 
 def cdFunc(path):
     try:
-        if path.startswith('~'):
+        if path is '~':
             os.chdir(os.getenv('HOME'))
-            break
-        os.chdir(path)
+        else:
+            os.chdir(path)
     except FileNotFoundError:
         sys.stdout.write(f'cd: {path}: No such file or directory\n')
 
