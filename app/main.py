@@ -43,7 +43,6 @@ def echoFunc(parsed):
     finParsed = []
 
     for i, string in enumerate(parsed):
-        print(i)
         if i == 0:
             finParsed.append(string)
             continue
