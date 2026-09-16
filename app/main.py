@@ -44,6 +44,7 @@ def myParser(arg):
                 match nextChar:
                     case '"':
                         tempStr += nextChar
+                        continue
                     case '\\':
                         tempStr += '\\'
                         continue
