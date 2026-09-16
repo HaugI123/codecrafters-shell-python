@@ -48,6 +48,10 @@ def myParser(arg):
                     tempStr += chr(39)
                 case 34:
                     tempStr += chr(34)
+                case 65 <= ord(nextChar) <= 90:
+                    tempStr += nextChar
+                case 97 <= ord(nextChar) <= 122:
+                    tempStr += nextChar
                 case _:
                     continue
 
