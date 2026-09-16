@@ -126,7 +126,10 @@ def runProg(paths, name, command):
     if not found:
         sys.stderr.write(f'{command}: command not found\n')
 
-def redirectFunc(text, fileName):
+def redirectFunc(textList):
+
+    fileName = textList[-1]
+
     path = f'{os.cwd()}/{fileName}'
     with open(path, 'a') as f:
         f.write(text)
@@ -156,6 +159,8 @@ def main():
                 cdFunc(parsed[1])
             case 'cat':
                 catFunc(parsed)
+            case '>':
+                runProg(paths, parsed[0], command)
             case _:
                 runProg(paths, cmdName, command)
 
