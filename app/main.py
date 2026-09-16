@@ -51,7 +51,7 @@ def echoFunc(parsed):
         if i == len(parsed)-1:
             finParsed.append(tempStr.lstrip())
 
-    system.stdout.write(f'{finParsed[1]}\n')
+    sys.stdout.write(f'{finParsed[1]}\n')
 
 def typeFunc(builtIns, command, paths):
     if command in builtIns:
