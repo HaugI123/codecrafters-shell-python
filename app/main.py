@@ -128,7 +128,7 @@ def runProg(paths, name, command):
 
 def redirectFunc(redirect, fileName, cmd):
 
-    stderrFile = open(fileName, w)
+    stderrFile = open(fileName, 'a')
     sys.stderr = stderrFile
 
     try:
