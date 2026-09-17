@@ -128,8 +128,6 @@ def runProg(paths, name, command):
 
 def redirectFunc(redirect, fileName, cmd):
 
-    fileName = os.path.join(f'{os.getcwd()}/{fileName}')
-
     stdoutFile = open(fileName,'w') if redirect == '>' else None
     stderrFile = open(fileName, 'w') if redirect == '2>' else None
 
