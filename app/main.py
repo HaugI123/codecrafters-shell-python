@@ -1,6 +1,6 @@
 import sys
 import os
-import re
+import readline
 import subprocess
 
 def myParser(arg):
@@ -62,7 +62,6 @@ def myParser(arg):
 
 def echoFunc(parsed):
 
-    #command = re.sub("  *", " ", command) if not "'" in command else re.sub("'", "", command)
     tempStr = ''
     finParsed = []
 
@@ -174,10 +173,23 @@ def appendFunc(fileName, cmd):
         if stderrFile:
             stderrFile.close()
 
+def customCompleter(vocab):
+
+    def complete(text, state):
+        results = [x for x in vocab if x.startswith(text)] + [None]
+        return results[state] + ' '
+
+    return complete
+
 
 def main():
 
     builtIns = ['type', 'exit', 'echo', 'pwd']
+
+
+    readline.parse_and_bind('tab: complete')
+    readline.set_completer(customCompleter({'echo', 'exit'}))
+
 
     while True:
         sys.stdout.write("$ ")
