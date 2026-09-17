@@ -126,10 +126,41 @@ def runProg(paths, name, command, parsed):
     if not found:
         sys.stderr.write(f'{command}: command not found\n')
 
-def redirectFunc(redirect, fileName, cmd):
+def redirectFunc(fileName, cmd):
+
+    if '>' in cmd:
+        redirect = '>'
+    elif '1>' in cmd:
+        redirect = '1>'
+    else:
+        redirect = '2>'
 
     stdoutFile = open(fileName,'w') if redirect == '>' or redirect == '1>' else None
     stderrFile = open(fileName, 'w') if redirect == '2>' else None
+
+    index = cmd.index(redirect)
+
+    text = cmd[:index]
+
+    try:
+        subprocess.run(text, stdout=stdoutFile, stderr=stderrFile)
+    finally:
+        if stdoutFile:
+            stdoutFile.close()
+        elif stderrFile:
+            stderrFile.close()
+
+def appendFunc(fileName, cmd):
+
+    if '>>' in cmd:
+        redirect = '>>'
+    elif '1>>' in cmd:
+        redirect = '1>>'
+    else:
+        redirect = '2>>'
+
+    stdoutFile = open(fileName,'a') if redirect == '>>' or redirect == '1>>' else None
+    stderrFile = open(fileName, 'a') if redirect == '2>>' else None
 
     index = cmd.index(redirect)
 
@@ -154,9 +185,8 @@ def main():
         command = input("")
         paths = os.environ['PATH'].split(':')
         parsed = myParser(command)
-        cmdName = parsed[0] if '>' not in parsed else '>'
-        cmdName = cmdName if '1>' not in parsed else '1>'
-        cmdName = cmdName if '2>' not in parsed else '2>'
+        cmdName = parsed[0] if '>' not in parsed or '1>' not in parsed or '2>' not in parsed else 'redirect'
+        cmdName = cmdName if '>>' not in parsed or '1>>' not in parsed or '2>>' not in parsed else 'append'
 
         match cmdName:
             case 'exit':
@@ -171,12 +201,10 @@ def main():
                 cdFunc(parsed[1])
             case 'cat':
                 catFunc(parsed)
-            case '>':
-                redirectFunc(cmdName, parsed[-1], parsed)
-            case '1>':
-                redirectFunc(cmdName, parsed[-1], parsed)
-            case '2>':
-                redirectFunc(cmdName, parsed[-1], parsed)
+            case 'redirect':
+                redirectFunc(parsed[-1], parsed)
+            case 'append':
+                appendFunc(parsed[-1], parsed)
             case _:
                 runProg(paths, cmdName, command, parsed)
 
