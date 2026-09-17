@@ -114,7 +114,7 @@ def cdFunc(path):
 def catFunc(statements):
     subprocess.run(statements)
 
-def runProg(paths, name, command):
+def runProg(paths, name, command, parsed):
     found = False
     for path in paths:
             fileName = os.path.join(path, name)
@@ -178,7 +178,7 @@ def main():
             case '2>':
                 redirectFunc(cmdName, parsed[-1], parsed)
             case _:
-                runProg(paths, cmdName, command)
+                runProg(paths, cmdName, command, parsed)
 
     pass
 
