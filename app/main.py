@@ -128,7 +128,7 @@ def runProg(paths, name, command):
 
 def redirectFunc(redirect, fileName, cmd):
 
-    stdoutFile = open(fileName,'w') if redirect == '>' else None
+    stdoutFile = open(fileName,'w') if redirect == '>' or redirect == '1>' else None
     stderrFile = open(fileName, 'w') if redirect == '2>' else None
 
     index = cmd.index(redirect)
@@ -154,7 +154,8 @@ def main():
         command = input("")
         paths = os.environ['PATH'].split(':')
         parsed = myParser(command)
-        cmdName = parsed[0] if ('>' not in parsed and '1>' not in parsed) else '>'
+        cmdName = parsed[0] if '>' not in parsed else '>'
+        cmdName = cmdName if '1>' not in parsed else '1>'
         cmdName = cmdName if '2>' not in parsed else '2>'
 
         match cmdName:
@@ -171,9 +172,11 @@ def main():
             case 'cat':
                 catFunc(parsed)
             case '>':
-                redirectFunc('>', parsed[-1], parsed)
+                redirectFunc(cmdName, parsed[-1], parsed)
+            case '1>':
+                redirectFunc(cmdName, parsed[-1], parsed)
             case '2>':
-                redirectFunc('2>', parsed[-1], parsed)
+                redirectFunc(cmdName, parsed[-1], parsed)
             case _:
                 runProg(paths, cmdName, command)
 
