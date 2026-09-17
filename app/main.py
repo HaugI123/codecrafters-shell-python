@@ -120,7 +120,7 @@ def runProg(paths, name, command):
             fileName = os.path.join(path, name)
 
             if os.path.isfile(fileName) and os.access(fileName, os.X_OK):
-                os.system(command)
+                subprocess.run(command)
                 found = True
                 break
     if not found:
@@ -128,16 +128,23 @@ def runProg(paths, name, command):
 
 def redirectFunc(redirect, fileName, cmd):
 
-    stderrFile = open(fileName, 'a')
-    sys.stderr = stderrFile
+    fileName = os.path.join(f'{os.getcwd()}/{fileName}')
+
+    stdoutFile = open(fileName,'w') if redirect == '>' else None
+    stderrFile = open(fileName, 'w') if redirect == '2>' else None
+
+    index = cmd.index(redirect)
+
+    text = cmd[:index]
 
     try:
-        path = os.path.join(os.cwd(), fileName)
-        os.path.isfile(path)
-        os.access(path, os.X_OK)
-        os.system(command)
-    except e:
-        print(e, file=sys.stderr)
+        subprocess.run(text, stdout=stdoutFile, stderr=stderrFile)
+    finally:
+        if stdoutFile:
+            stdoutFile.close()
+        elif stderrFile:
+            stderrFile.close()
+
 
 def main():
 
@@ -156,7 +163,7 @@ def main():
             case 'exit':
                 break
             case 'echo':
-                echo = echoFunc(parsed)
+                echoFunc(parsed)
             case 'type':
                 typeFunc(builtIns, parsed[1], paths)
             case 'pwd':
@@ -166,9 +173,9 @@ def main():
             case 'cat':
                 catFunc(parsed)
             case '>':
-                redirectFunc('>', parsed[-1], command)
+                redirectFunc('>', parsed[-1], parsed)
             case '2>':
-                redirectFunc('2>', parsed[-1], command)
+                redirectFunc('2>', parsed[-1], parsed)
             case _:
                 runProg(paths, cmdName, command)
 
