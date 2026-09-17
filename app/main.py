@@ -120,7 +120,7 @@ def runProg(paths, name, command, parsed):
             fileName = os.path.join(path, name)
 
             if os.path.isfile(fileName) and os.access(fileName, os.X_OK):
-                subprocess.run(command)
+                subprocess.run(parsed)
                 found = True
                 break
     if not found:
