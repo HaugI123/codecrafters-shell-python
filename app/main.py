@@ -147,7 +147,7 @@ def redirectFunc(fileName, cmd):
     finally:
         if stdoutFile:
             stdoutFile.close()
-        elif stderrFile:
+        if stderrFile:
             stderrFile.close()
 
 def appendFunc(fileName, cmd):
@@ -171,7 +171,7 @@ def appendFunc(fileName, cmd):
     finally:
         if stdoutFile:
             stdoutFile.close()
-        elif stderrFile:
+        if stderrFile:
             stderrFile.close()
 
 
@@ -185,8 +185,11 @@ def main():
         command = input("")
         paths = os.environ['PATH'].split(':')
         parsed = myParser(command)
-        cmdName = parsed[0] if '>' not in parsed or '1>' not in parsed or '2>' not in parsed else 'redirect'
-        cmdName = cmdName if '>>' not in parsed or '1>>' not in parsed or '2>>' not in parsed else 'append'
+        cmdName = parsed[0]
+        if any(st in parsed for st in ('>', '1>', '2>')):
+            cmdName = 'redirect'
+        elif any(st in parsed for st in ('>>', '1>>', '2>>')):
+            cmdName = 'append'
 
         match cmdName:
             case 'exit':
