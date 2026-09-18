@@ -188,6 +188,10 @@ def updateSet(set1, paths):
 
     for path in paths:
         newPath = Path(path)
+
+        if not newPath.exists():
+            continue
+
         for temp in newPath.iterdir():
             set1.add(temp.name)
 
