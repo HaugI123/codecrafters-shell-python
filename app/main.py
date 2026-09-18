@@ -2,6 +2,7 @@ import sys
 import os
 import readline
 import subprocess
+from pathlib import Path
 
 def myParser(arg):
 
@@ -174,6 +175,8 @@ def appendFunc(fileName, cmd):
             stderrFile.close()
 
 def customCompleter(vocab):
+    #Followed a guide on eli.thegreenplace.net to generate this function
+    #Understand whats going on wouldnt have thought to generate it like this myself though
 
     def complete(text, state):
         results = [x for x in vocab if x.startswith(text)] + [None]
@@ -181,21 +184,34 @@ def customCompleter(vocab):
 
     return complete
 
+def updateSet(set1, paths):
+
+    for path in paths:
+        newPath = Path(path)
+        for temp in newPath.iterdir():
+            set1.add(temp.name)
+
+    return set1
+
+
+
 
 def main():
 
     builtIns = ['type', 'exit', 'echo', 'pwd']
+    paths = os.environ['PATH'].split(':')
+    vocab = set(builtIns)
 
+    vocab = updateSet(vocab, paths)
 
     readline.parse_and_bind('tab: complete')
-    readline.set_completer(customCompleter({'echo', 'exit'}))
+    readline.set_completer(customCompleter(vocab))
 
 
     while True:
         sys.stdout.write("$ ")
 
         command = input("")
-        paths = os.environ['PATH'].split(':')
         parsed = myParser(command)
         cmdName = parsed[0]
         if any(st in parsed for st in ('>', '1>', '2>')):
