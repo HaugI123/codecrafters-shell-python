@@ -195,6 +195,16 @@ def updateSet(set1, paths):
         for temp in newPath.iterdir():
             set1.add(temp.name)
 
+    for path in Path(os.getcwd()).iterdir():
+
+        if not path.exists():
+            continue
+
+        if not path.is_file():
+            continue
+
+        set1.add(path.name)
+
     return set1
 
 
