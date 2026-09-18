@@ -200,9 +200,6 @@ def updateSet(set1, paths):
         if not path.exists():
             continue
 
-        if not path.is_file():
-            continue
-
         set1.add(path.name)
 
     return set1
