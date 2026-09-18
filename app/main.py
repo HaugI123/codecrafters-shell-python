@@ -193,7 +193,10 @@ def customCompleter(vocab):
         if test:
             tempSet = updateSet(path, True)
             results = [x for x in tempSet if x.startswith(text)] + [None]
-            return results[state] + '/'
+            if Path(results[state]).if_file():
+                return results[state] + ' '
+            elif Path(results[state]).is_dir():
+                return results[state] + '/'
 
         else:
             results = [x for x in vocab if x.startswith(text)] + [None]
