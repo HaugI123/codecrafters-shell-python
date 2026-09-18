@@ -179,30 +179,64 @@ def customCompleter(vocab):
     #Understand whats going on wouldnt have thought to generate it like this myself though
 
     def complete(text, state):
-        results = [x for x in vocab if x.startswith(text)] + [None]
-        return results[state] + ' '
+
+
+        line = readline.get_line_buffer()
+        parsed = myParser(line)
+        test = False
+        for x in parsed:
+            if '/' in x:
+                path = x
+                test = True
+                break
+
+        if test:
+            tempSet = updateSet(path, True)
+            results = [x for x in tempSet if x.startswith(text)] + [None]
+            return results[state] + '/'
+
+        else:
+            results = [x for x in vocab if x.startswith(text)] + [None]
+            return results[state] + ' '
 
     return complete
 
-def updateSet(set1, paths):
+def updateSet(paths, testPath, set1=set()):
 
-    for path in paths:
-        newPath = Path(path)
+    if testPath:
+        try:
+            set2 = set()
+            if not Path(paths).resolve().exists():
+                if Path(paths).parent.exists():
+                    for temp in Path(paths).parent.iterdir():
+                        set2.add(temp.name)
+            else:
+                for temp in Path(paths).resolve().iterdir():
+                    set2.add(temp.name)
 
-        if not newPath.exists():
-            continue
+            return set2
 
-        for temp in newPath.iterdir():
-            set1.add(temp.name)
+        except TypeError:
+            pass
+    else:
 
-    for path in Path(os.getcwd()).iterdir():
+        for path in paths:
+            newPath = Path(path)
 
-        if not path.exists():
-            continue
+            if not newPath.exists():
+                continue
 
-        set1.add(path.name)
+            for temp in newPath.iterdir():
+                set1.add(temp.name)
 
-    return set1
+        for path in Path(os.getcwd()).iterdir():
+
+            if not path.exists():
+                continue
+
+            set1.add(path.name)
+
+        return set1
 
 
 
@@ -213,14 +247,14 @@ def main():
     paths = os.environ['PATH'].split(':')
     vocab = set(builtIns)
 
-    vocab = updateSet(vocab, paths)
+    vocab = updateSet(paths, False, vocab)
 
     readline.parse_and_bind('tab: complete')
     readline.set_completer(customCompleter(vocab))
 
-
     while True:
         command = input("$ ")
+        print(readline.get_line_buffer())
         parsed = myParser(command)
         cmdName = parsed[0]
         if any(st in parsed for st in ('>', '1>', '2>')):
