@@ -180,7 +180,7 @@ def customCompleter(vocab):
 
     def complete(text, state):
         results = [x for x in vocab if x.startswith(text)] + [None]
-        return f'$ {results[state]} '
+        return results[state] + ' '
 
     return complete
 
@@ -213,9 +213,7 @@ def main():
 
 
     while True:
-        sys.stdout.write("$ ")
-
-        command = input("")
+        command = input("$ ")
         parsed = myParser(command)
         cmdName = parsed[0]
         if any(st in parsed for st in ('>', '1>', '2>')):
