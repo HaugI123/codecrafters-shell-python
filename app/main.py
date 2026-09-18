@@ -180,7 +180,7 @@ def customCompleter(vocab):
 
     def complete(text, state):
         results = [x for x in vocab if x.startswith(text)] + [None]
-        return results[state] + ' '
+        return f'$ {results[state]} '
 
     return complete
 
