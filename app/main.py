@@ -266,8 +266,7 @@ def updateSet(paths, testPath=False, set1=set(), fullPath=False):
 
         return set1
 
-def completeFunc(parsed):
-    cKey = dict()
+def completeFunc(parsed, cKey):
     if parsed[1] == '-p':
         cmd = parsed[-1]
         if not cKey.get(f'{cmd}'):
@@ -276,7 +275,7 @@ def completeFunc(parsed):
             sys.stdout.write(f'complete -C {cKey.get(cmd)} {cmd}\n')
     if parsed[1] == '-C':
         cKey.update({f'{parsed[-1]}': f'{parsed[-2]}'})
-
+        return cKey
 
 def main():
 
@@ -285,6 +284,8 @@ def main():
     vocab = set([x+' ' for x in builtIns])
 
     vocab = updateSet(paths, set1=vocab)
+
+    dictKey = dict()
 
     readline.parse_and_bind('tab: complete')
     readline.set_completer(customCompleter(vocab))
@@ -316,7 +317,7 @@ def main():
             case 'append':
                 appendFunc(parsed[-1], parsed)
             case 'complete':
-                completeFunc(parsed)
+                dictKey = completeFunc(parsed, dictKey)
             case _:
                 runProg(paths, cmdName, command, parsed)
 
