@@ -193,10 +193,15 @@ def customCompleter(vocab):
         if test:
             tempSet = updateSet(path, True)
             results = [x for x in tempSet if x.startswith(text)] + [None]
-            if Path(results[state]).if_file():
-                return results[state] + ' '
-            elif Path(results[state]).is_dir():
-                return results[state] + '/'
+
+            result = results[state]
+
+            if result is None:
+                return None
+
+            fullPath = Path(path) / result if Path(path).is_dir() else Path(path).parent / result
+
+            return result + '/' if fullPath.is_dir() else result + ' '
 
         else:
             results = [x for x in vocab if x.startswith(text)] + [None]
@@ -257,7 +262,6 @@ def main():
 
     while True:
         command = input("$ ")
-        print(readline.get_line_buffer())
         parsed = myParser(command)
         cmdName = parsed[0]
         if any(st in parsed for st in ('>', '1>', '2>')):
