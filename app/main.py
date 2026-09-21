@@ -267,8 +267,15 @@ def updateSet(paths, testPath=False, set1=set(), fullPath=False):
         return set1
 
 def completeFunc(parsed):
+    cKey = dict()
     if parsed[1] == '-p':
-        sys.stderr.write(f'complete: {parsed[-1]}: no completion specification\n')
+        cmd = parsed[-1]
+        if not cKey.get(f'{cmd}'):
+            sys.stderr.write(f'complete: {cmd}: no completion specification\n')
+        else:
+            sys.stdout.write(f'complete -C {cKey.get(cmd)} {cmd}\n')
+    if parsed[1] == '-C':
+        cKey.update({f'{parsed[-1]}': f'{parsed[-2]}'})
 
 
 def main():
