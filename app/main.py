@@ -190,8 +190,14 @@ def customCompleter(vocab):
                 test = True
                 break
 
+
+        if ' ' in line and not test:
+            tempSet = updateSet(parsed, fullPath=True)
+            results = [x for x in tempSet if x.startswith(text)] + [None]
+            return results[state]
+
         if test:
-            tempSet = updateSet(path, True)
+            tempSet = updateSet(path, testPath=True, fullPath=True)
             results = [x for x in tempSet if x.startswith(text)] + [None]
 
             result = results[state]
@@ -209,11 +215,12 @@ def customCompleter(vocab):
 
     return complete
 
-def updateSet(paths, testPath, set1=set()):
+def updateSet(paths, testPath=False, set1=set(), fullPath=False):
 
-    if testPath:
+
+    if testPath and fullPath:
+        set2 = set()
         try:
-            set2 = set()
             if not Path(paths).resolve().exists():
                 if Path(paths).parent.exists():
                     for temp in Path(paths).parent.iterdir():
@@ -226,6 +233,18 @@ def updateSet(paths, testPath, set1=set()):
 
         except TypeError:
             pass
+    elif fullPath and not testPath:
+        set2 = set()
+        for path in Path(os.getcwd()).iterdir():
+
+            if not path.exists():
+                continue
+
+
+            set2.add(f'{path.name}/')
+
+        return set2
+
     else:
 
         for path in paths:
@@ -255,7 +274,7 @@ def main():
     paths = os.environ['PATH'].split(':')
     vocab = set([x+' ' for x in builtIns])
 
-    vocab = updateSet(paths, False, vocab)
+    vocab = updateSet(paths, set1=vocab)
 
     readline.parse_and_bind('tab: complete')
     readline.set_completer(customCompleter(vocab))
