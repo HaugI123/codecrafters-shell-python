@@ -194,9 +194,14 @@ def customCompleter(vocab):
         if ' ' in line and not test:
             tempSet = updateSet(parsed, fullPath=True)
             results = [x for x in tempSet if x.startswith(text)] + [None]
-            return results[state]
 
-        if test:
+            result = results[state]
+
+            fullPath = Path(path) / result if Path(path).is_dir() else Path(path).parent / result
+
+            return result+'/' if fullPath.is_dir() else result + ' '
+
+        elif test:
             tempSet = updateSet(path, testPath=True, fullPath=True)
             results = [x for x in tempSet if x.startswith(text)] + [None]
 
