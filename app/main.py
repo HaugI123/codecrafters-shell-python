@@ -272,7 +272,7 @@ def completeFunc(parsed, cKey):
         if not cKey.get(f'{cmd}'):
             sys.stderr.write(f'complete: {cmd}: no completion specification\n')
         else:
-            sys.stdout.write(f'complete -C {cKey.get(cmd)} {cmd}\n')
+            sys.stdout.write(f"complete -C '{cKey.get(cmd)}' {cmd}\n")
     if parsed[1] == '-C':
         cKey.update({f'{parsed[-1]}': f'{parsed[-2]}'})
         return cKey
