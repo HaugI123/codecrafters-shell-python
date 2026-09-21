@@ -271,7 +271,7 @@ def updateSet(paths, testPath=False, set1=set(), fullPath=False):
 
 def main():
 
-    builtIns = ['type', 'exit', 'echo', 'pwd']
+    builtIns = ['type', 'exit', 'echo', 'pwd', 'complete']
     paths = os.environ['PATH'].split(':')
     vocab = set([x+' ' for x in builtIns])
 
