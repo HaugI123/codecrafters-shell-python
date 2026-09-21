@@ -205,7 +205,7 @@ def customCompleter(vocab):
 
         else:
             results = [x for x in vocab if x.startswith(text)] + [None]
-            return results[state] + ' '
+            return results[state]
 
     return complete
 
@@ -235,14 +235,14 @@ def updateSet(paths, testPath, set1=set()):
                 continue
 
             for temp in newPath.iterdir():
-                set1.add(temp.name)
+                set1.add(f'{temp.name} ')
 
         for path in Path(os.getcwd()).iterdir():
 
             if not path.exists():
                 continue
 
-            set1.add(path.name)
+            set1.add(f'{path.name}/')
 
         return set1
 
@@ -253,7 +253,7 @@ def main():
 
     builtIns = ['type', 'exit', 'echo', 'pwd']
     paths = os.environ['PATH'].split(':')
-    vocab = set(builtIns)
+    vocab = set([x+' ' for x in builtIns])
 
     vocab = updateSet(paths, False, vocab)
 
