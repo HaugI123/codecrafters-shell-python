@@ -268,7 +268,7 @@ def updateSet(paths, testPath=False, set1=set(), fullPath=False):
 
 def completeFunc(parsed):
     if parsed[1] == '-p':
-        sys.stderr.write(f'complete: {parsed[-1]}: no completion specification')
+        sys.stderr.write(f'complete: {parsed[-1]}: no completion specification\n')
 
 
 def main():
