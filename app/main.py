@@ -266,7 +266,9 @@ def updateSet(paths, testPath=False, set1=set(), fullPath=False):
 
         return set1
 
-
+def completeFunc(parsed):
+    if parsed[1] == '-p':
+        sys.stderr.write(f'complete: {parsed[-1]}: no completion specification')
 
 
 def main():
@@ -306,6 +308,8 @@ def main():
                 redirectFunc(parsed[-1], parsed)
             case 'append':
                 appendFunc(parsed[-1], parsed)
+            case 'complete':
+                completeFunc(parsed)
             case _:
                 runProg(paths, cmdName, command, parsed)
 
