@@ -4,11 +4,10 @@ import readline
 import subprocess
 from pathlib import Path
 
+dictKey = dict()
+
 def myParser(arg):
 
-    global skip
-    global dictKey
-    dictKey = dict()
     skip = False
     specState = False
     specChars = ["'", '"']
@@ -193,7 +192,7 @@ def customCompleter(vocab):
                 break
 
         if text in dictKey.keys():
-            return list(dictKey.values()[0][1])
+            return f'{list(dictKey.values()[0][1])} '
 
         if ' ' in line and not test:
             tempSet = updateSet(parsed, fullPath=True)
@@ -322,7 +321,6 @@ def main():
                 appendFunc(parsed[-1], parsed)
             case 'complete':
                 completeFunc(parsed)
-                print(dictKey)
             case _:
                 runProg(paths, cmdName, command, parsed)
 
