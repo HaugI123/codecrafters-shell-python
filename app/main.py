@@ -192,8 +192,6 @@ def customCompleter(vocab):
                 break
 
         if line.strip() in dictKey.keys():
-            result = list(dictKey.values())[0]
-            print(type(result))
             return f'{list(dictKey.values())[0][1]} '
 
         if ' ' in line and not test:
@@ -282,7 +280,7 @@ def completeFunc(parsed):
         #cKey.update({f'{parsed[-1]}': f'{parsed[-2]}'})
         response = subprocess.run(parsed[-2], capture_output=True)
         response = response.stdout.decode('utf-8').split('\n')
-        dictKey.update({f'{parsed[-1]}': f'{[parsed[-2], response[0]]}'})
+        dictKey.update({parsed[-1]: [parsed[-2], response[0]]})
 
 def main():
 
