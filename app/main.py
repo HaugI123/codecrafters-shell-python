@@ -272,18 +272,18 @@ def updateSet(paths, testPath=False, set1=set(), fullPath=False):
 
         return set1
 
-def completeFunc(parsed, cKey):
+def completeFunc(parsed):
     if parsed[1] == '-p':
         cmd = parsed[-1]
-        if not cKey.get(f'{cmd}'):
+        if not dictKey.get(f'{cmd}'):
             sys.stderr.write(f'complete: {cmd}: no completion specification\n')
         else:
-            sys.stdout.write(f"complete -C '{cKey.get(cmd)}' {cmd}\n")
+            sys.stdout.write(f"complete -C '{dictKey.get(cmd)}' {cmd}\n")
     if parsed[1] == '-C':
         #cKey.update({f'{parsed[-1]}': f'{parsed[-2]}'})
         response = subprocess.run(parsed[-2], capture_output=True)
         response = response.stdout.decode('utf-8').split('\n')
-        cKey.update({f'{parsed[-1]}': f'{[parsed[-2], response[0]]}'})
+        dictKey.update({f'{parsed[-1]}': f'{[parsed[-2], response[0]]}'})
 
 def main():
 
@@ -323,7 +323,7 @@ def main():
             case 'append':
                 appendFunc(parsed[-1], parsed)
             case 'complete':
-                completeFunc(parsed, dictKey)
+                completeFunc(parsed)
             case _:
                 runProg(paths, cmdName, command, parsed)
 
