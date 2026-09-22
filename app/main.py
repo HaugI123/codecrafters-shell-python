@@ -191,7 +191,7 @@ def customCompleter(vocab):
                 test = True
                 break
 
-        print(dictKey)
+        print("I've made it here damn it")
 
         if text in dictKey.keys():
             return list(dictKey.values()[0][1])
