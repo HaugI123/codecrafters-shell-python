@@ -190,6 +190,7 @@ def customCompleter(vocab):
                 test = True
                 break
 
+        print(vocab)
 
         if ' ' in line and not test:
             tempSet = updateSet(parsed, fullPath=True)
@@ -266,7 +267,7 @@ def updateSet(paths, testPath=False, set1=set(), fullPath=False):
 
         return set1
 
-def completeFunc(parsed, cKey):
+def completeFunc(parsed, cKey, tabSet):
     if parsed[1] == '-p':
         cmd = parsed[-1]
         if not cKey.get(f'{cmd}'):
@@ -275,6 +276,7 @@ def completeFunc(parsed, cKey):
             sys.stdout.write(f"complete -C '{cKey.get(cmd)}' {cmd}\n")
     if parsed[1] == '-C':
         cKey.update({f'{parsed[-1]}': f'{parsed[-2]}'})
+        tabSet.add((parsed[-1],parsed[-2]))
 
 def main():
 
@@ -316,7 +318,7 @@ def main():
             case 'append':
                 appendFunc(parsed[-1], parsed)
             case 'complete':
-                completeFunc(parsed, dictKey)
+                completeFunc(parsed, dictKey, vocab)
             case _:
                 runProg(paths, cmdName, command, parsed)
 
