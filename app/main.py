@@ -276,7 +276,9 @@ def completeFunc(parsed, cKey, tabSet):
             sys.stdout.write(f"complete -C '{cKey.get(cmd)}' {cmd}\n")
     if parsed[1] == '-C':
         cKey.update({f'{parsed[-1]}': f'{parsed[-2]}'})
-        tabSet.add((parsed[-1],parsed[-2]))
+        response = subprocess.run(parsed[-2], capture_output=True)
+        response = response.stdout.decode('utf-8')
+        tabSet.add((parsed[-1], response))
 
 def main():
 
