@@ -8,6 +8,7 @@ def myParser(arg):
 
     global skip
     global dictKey
+    dictKey = dict()
     skip = False
     specState = False
     specChars = ["'", '"']
@@ -191,6 +192,8 @@ def customCompleter(vocab):
                 test = True
                 break
 
+        print(dictKey)
+
         if text in dictKey.keys():
             return list(dictKey.values()[0][1])
 
@@ -290,8 +293,6 @@ def main():
     vocab = set([x+' ' for x in builtIns])
     vocab = updateSet(paths, set1=vocab)
 
-    dictKey = dict()
-
     readline.parse_and_bind('tab: complete')
     readline.set_completer(customCompleter(vocab))
 
@@ -323,7 +324,6 @@ def main():
                 appendFunc(parsed[-1], parsed)
             case 'complete':
                 completeFunc(parsed, dictKey)
-                print(dictKey)
             case _:
                 runProg(paths, cmdName, command, parsed)
 
