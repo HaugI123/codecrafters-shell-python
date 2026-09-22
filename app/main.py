@@ -193,7 +193,7 @@ def customCompleter(vocab):
 
         if line.strip() in dictKey.keys():
             result = list(dictKey.values())[0][1]
-            print(result)
+            print(type(result))
             return f'{list(dictKey.values())[0][1]} '
 
         if ' ' in line and not test:
