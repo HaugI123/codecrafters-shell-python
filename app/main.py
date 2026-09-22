@@ -192,8 +192,6 @@ def customCompleter(vocab):
                 test = True
                 break
 
-        print(dictKey)
-
         if text in dictKey.keys():
             return list(dictKey.values()[0][1])
 
@@ -324,6 +322,7 @@ def main():
                 appendFunc(parsed[-1], parsed)
             case 'complete':
                 completeFunc(parsed)
+                print(dictKey)
             case _:
                 runProg(paths, cmdName, command, parsed)
 
