@@ -191,7 +191,8 @@ def customCompleter(vocab):
                 test = True
                 break
 
-        print(line in dictKey.keys())
+        print('LINE: ', line)
+        print('KEYS: ', dictKey.keys())
 
         if line in dictKey.keys():
             return f'{list(dictKey.values()[0][1])} '
