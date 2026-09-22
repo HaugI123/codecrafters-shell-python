@@ -190,6 +190,7 @@ def customCompleter(vocab):
                 path = x
                 test = True
                 break
+        print(dictKey.keys())
 
         if text in dictKey.keys():
             return list(dictKey.values()[0][1])
