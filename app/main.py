@@ -275,14 +275,13 @@ def completeFunc(parsed, cKey):
             sys.stdout.write(f"complete -C '{cKey.get(cmd)}' {cmd}\n")
     if parsed[1] == '-C':
         cKey.update({f'{parsed[-1]}': f'{parsed[-2]}'})
-    return cKey
 
 def main():
 
     builtIns = ['type', 'exit', 'echo', 'pwd', 'complete']
     paths = os.environ['PATH'].split(':')
-    vocab = set([x+' ' for x in builtIns])
 
+    vocab = set([x+' ' for x in builtIns])
     vocab = updateSet(paths, set1=vocab)
 
     dictKey = dict()
@@ -317,7 +316,7 @@ def main():
             case 'append':
                 appendFunc(parsed[-1], parsed)
             case 'complete':
-                dictKey = completeFunc(parsed, dictKey)
+                completeFunc(parsed, dictKey)
             case _:
                 runProg(paths, cmdName, command, parsed)
 
