@@ -7,6 +7,7 @@ from pathlib import Path
 def myParser(arg):
 
     global skip
+    global dictKey
     skip = False
     specState = False
     specChars = ["'", '"']
@@ -190,7 +191,8 @@ def customCompleter(vocab):
                 test = True
                 break
 
-        print(vocab)
+        if text in dictKey.keys():
+            return list(dictKey.values()[0][1])
 
         if ' ' in line and not test:
             tempSet = updateSet(parsed, fullPath=True)
@@ -267,7 +269,7 @@ def updateSet(paths, testPath=False, set1=set(), fullPath=False):
 
         return set1
 
-def completeFunc(parsed, cKey, tabSet):
+def completeFunc(parsed, cKey):
     if parsed[1] == '-p':
         cmd = parsed[-1]
         if not cKey.get(f'{cmd}'):
@@ -275,10 +277,10 @@ def completeFunc(parsed, cKey, tabSet):
         else:
             sys.stdout.write(f"complete -C '{cKey.get(cmd)}' {cmd}\n")
     if parsed[1] == '-C':
-        cKey.update({f'{parsed[-1]}': f'{parsed[-2]}'})
+        #cKey.update({f'{parsed[-1]}': f'{parsed[-2]}'})
         response = subprocess.run(parsed[-2], capture_output=True)
         response = response.stdout.decode('utf-8').split('\n')
-        tabSet.add((parsed[-1], response[0]))
+        cKey.update({f'{parsed[-1]}': f'{[parsed[-2], response[0]]}'})
 
 def main():
 
@@ -320,7 +322,7 @@ def main():
             case 'append':
                 appendFunc(parsed[-1], parsed)
             case 'complete':
-                completeFunc(parsed, dictKey, vocab)
+                completeFunc(parsed, dictKey)
             case _:
                 runProg(paths, cmdName, command, parsed)
 
