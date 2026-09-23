@@ -313,9 +313,12 @@ def completeFunc(parsed):
     if parsed[1] == '-r':
         dictKey.pop(parsed[-1])
 
+def jobFunc(parsed):
+    return
+
 def main():
 
-    builtIns = ['type', 'exit', 'echo', 'pwd', 'complete']
+    builtIns = ['type', 'exit', 'echo', 'pwd', 'complete', 'jobs']
     paths = os.environ['PATH'].split(':')
 
     vocab = set([x+' ' for x in builtIns])
@@ -353,6 +356,8 @@ def main():
                 appendFunc(parsed[-1], parsed)
             case 'complete':
                 completeFunc(parsed)
+            case 'jobs':
+                jobFunc(parsed)
             case _:
                 runProg(paths, cmdName, command, parsed)
 
