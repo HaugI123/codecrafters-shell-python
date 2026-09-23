@@ -193,7 +193,6 @@ def customCompleter(vocab):
 
         if line.strip() in dictKey.keys():
             result = dictKey[line.strip()][1]
-            print(result)
             return result + ' '
 
         if ' ' in line and not test:
@@ -293,6 +292,7 @@ def main():
     vocab = updateSet(paths, set1=vocab)
 
     readline.parse_and_bind('tab: complete')
+    readline.set_completer_delims('')
     readline.set_completer(customCompleter(vocab))
 
     while True:
