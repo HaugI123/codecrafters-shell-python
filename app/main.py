@@ -206,7 +206,7 @@ def customCompleter(vocab):
                 result = [results[0] + ' '] + [None]
                 return result[state]
             else:
-                print(line.strip())
+                print(dictKey[line.strip()])
                 results = ['ni']
                 return results[state]
 
