@@ -191,11 +191,12 @@ def customCompleter(vocab):
                 test = True
                 break
 
-        if line.strip() in dictKey.keys():
+       """ if line.strip() in dictKey.keys():
             result = dictKey[line.strip()][1]
             results = [result + ' ']
             print('the fuck')
             return results[state] if state < len(results) else None
+"""
 
         if parsed[0] in dictKey.keys():
             for value in dictKey[parsed[0]]:
@@ -203,8 +204,11 @@ def customCompleter(vocab):
                     output = subprocess.run([value, parsed[0], parsed[-1], parsed[-2]], capture_output=True, text=True)
                     results = output.stdout.splitlines()
                     result = [results[0] + ' '] + [None]
-                    print('nogger')
                     return result[state]
+            result = dictKey[line.strip()][1]
+            results = [result[0] + ' '] + [None]
+            return results[state]
+
 
         if ' ' in line and not test:
             tempSet = updateSet(parsed, fullPath=True)
