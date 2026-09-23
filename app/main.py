@@ -203,6 +203,7 @@ def customCompleter(vocab):
                     output = subprocess.run([value, parsed[0], parsed[-1], parsed[-2]], capture_output=True, text=True)
                     results = output.stdout.splitlines()
                     result = [results[0] + ' '] + [None]
+                    print('nogger')
                     return result[state]
 
         if ' ' in line and not test:
