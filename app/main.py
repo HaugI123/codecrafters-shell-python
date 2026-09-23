@@ -310,6 +310,9 @@ def completeFunc(parsed):
 
         dictKey.update({parsed[-1]: parsed[-2]})
 
+    if parsed[1] == '-r':
+        dictKey.pop(parsed[-1])
+
 def main():
 
     builtIns = ['type', 'exit', 'echo', 'pwd', 'complete']
