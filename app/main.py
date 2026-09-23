@@ -237,6 +237,7 @@ def updateSet(paths, testPath=False, set1=set(), fullPath=False):
 
         except TypeError:
             pass
+
     elif fullPath and not testPath:
         set2 = set()
         for path in Path(os.getcwd()).iterdir():
