@@ -191,7 +191,7 @@ def customCompleter(vocab):
                 test = True
                 break
 
-       """
+        """
         if line.strip() in dictKey.keys():
             result = dictKey[line.strip()][1]
             results = [result + ' ']
