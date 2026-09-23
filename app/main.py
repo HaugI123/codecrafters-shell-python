@@ -200,7 +200,7 @@ def customCompleter(vocab):
 
                 output = subprocess.run([dictKey[parsed[0]][0], parsed[0], parsed[-1], parsed[-2]], capture_output=True, text=True, env=env)
                 results = output.stdout.splitlines()
-                result = [results[0] + ' '] + [None]
+                result = [results + ' '] + [None]
                 print(result)
                 return result[state]
             else:
