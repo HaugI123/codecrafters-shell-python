@@ -303,7 +303,6 @@ def completeFunc(parsed):
             dictKey.update({parsed[-1]: [parsed[-2], response]})
         else:
             dictKey.update({parsed[-1]: parsed[-2]})
-            print(dictKey)
 
 def main():
 
