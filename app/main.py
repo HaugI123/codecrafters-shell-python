@@ -301,7 +301,7 @@ def main():
     vocab = updateSet(paths, set1=vocab)
 
     readline.parse_and_bind('tab: complete')
-    readline.set_completer_delims(' \t\n')
+    readline.set_completer_delims(' \t\n/')
     readline.set_completer(customCompleter(vocab))
 
     while True:
