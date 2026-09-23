@@ -313,8 +313,11 @@ def completeFunc(parsed):
     if parsed[1] == '-r':
         dictKey.pop(parsed[-1])
 
-def jobFunc(parsed):
-    return
+def jobFunc(parsed, jobNum):
+    backJob = subprocess.Popen(parsed)
+    sys.stdout.write(f'[{jobNum}] {backJob.pid}\n')
+    jobNum +=1
+    return jobNum
 
 def main():
 
@@ -328,6 +331,8 @@ def main():
     readline.set_completer_delims(' \t\n/')
     readline.set_completer(customCompleter(vocab))
 
+    job = 1
+
     while True:
         command = input("$ ")
         parsed = myParser(command)
@@ -336,6 +341,9 @@ def main():
             cmdName = 'redirect'
         elif any(st in parsed for st in ('>>', '1>>', '2>>')):
             cmdName = 'append'
+        elif parsed[-1] == '&':
+            cmdName = 'jobs'
+            parsed.pop(-1)
 
         match cmdName:
             case 'exit':
@@ -357,7 +365,7 @@ def main():
             case 'complete':
                 completeFunc(parsed)
             case 'jobs':
-                jobFunc(parsed)
+                job = jobFunc(parsed, job)
             case _:
                 runProg(paths, cmdName, command, parsed)
 
