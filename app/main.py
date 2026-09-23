@@ -299,7 +299,7 @@ def completeFunc(parsed):
             response = response.stdout.decode('utf-8').split('\n')
         except Exception:
             pass
-        print(response)
+        print(response[0])
         if response != '':
             dictKey.update({parsed[-1]: [parsed[-2], response]})
         else:
