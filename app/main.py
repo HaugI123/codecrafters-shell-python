@@ -301,10 +301,14 @@ def completeFunc(parsed):
             response = response.stdout.decode('utf-8').split('\n')
         except Exception:
             pass
-        if response[0]:
-            dictKey.update({parsed[-1]: [parsed[-2], response]})
-        else:
-            dictKey.update({parsed[-1]: [parsed[-2], False]})
+        try:
+            if response[0]:
+                dictKey.update({parsed[-1]: [parsed[-2], response]})
+            else:
+                dictKey.update({parsed[-1]: [parsed[-2], False]})
+        except Exception:
+            pass
+
 
 def main():
 
