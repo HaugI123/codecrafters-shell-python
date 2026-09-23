@@ -191,6 +191,8 @@ def customCompleter(vocab):
                 test = True
                 break
 
+        print(dictKey)
+
         if line.strip() in dictKey.keys():
             result = dictKey[line.strip()][1]
             results = [result + ' ']
@@ -288,7 +290,7 @@ def completeFunc(parsed):
         except FileNotFoundError:
             pass
         if response:
-            dictKey.update({parsed[-1]: [parsed[-2], response[0]]})
+            dictKey.update({parsed[-1]: [parsed[-2], response]})
         else:
             dictKey.update({f'{parsed[-1]}': f'{parsed[-2]}'})
 
