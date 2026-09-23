@@ -191,17 +191,14 @@ def customCompleter(vocab):
                 test = True
                 break
 
-        """
-        if line.strip() in dictKey.keys():
-            result = dictKey[line.strip()][1]
-            results = [result + ' ']
-            print('the fuck')
-            return results[state] if state < len(results) else None
-        """
-
         if parsed[0] in dictKey.keys():
             if 'completer' in dictKey[parsed[0]][0].lower() and dictKey[parsed[0]][1] == False:
-                output = subprocess.run([dictKey[parsed[0]][0], parsed[0], parsed[-1], parsed[-2]], capture_output=True, text=True)
+
+                env = os.environ.copy()
+                env['COMP_LINE'] = line
+                env['COMP_POINT'] = str(readline.get_endidx())
+
+                output = subprocess.run([dictKey[parsed[0]][0], parsed[0], parsed[-1], parsed[-2]], capture_output=True, text=True, env=env)
                 results = output.stdout.splitlines()
                 result = [results[0] + ' '] + [None]
                 return result[state]
