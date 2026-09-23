@@ -314,6 +314,8 @@ def completeFunc(parsed):
         dictKey.pop(parsed[-1])
 
 def jobFunc(parsed, jobNum):
+    if len(parsed) == 1:
+        return
     backJob = subprocess.Popen(parsed)
     sys.stdout.write(f'[{jobNum}] {backJob.pid}\n')
     jobNum +=1
