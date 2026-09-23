@@ -191,11 +191,6 @@ def customCompleter(vocab):
                 test = True
                 break
 
-
-        print("LINE:", repr(line), file=sys.stderr)
-        print("TEXT:", repr(text), file=sys.stderr)
-        print("PARSED:", repr(parsed), file=sys.stderr)
-
         if line.strip() in dictKey.keys():
             result = dictKey[line.strip()][1]
             results = [result + ' ']
