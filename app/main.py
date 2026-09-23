@@ -192,9 +192,9 @@ def customCompleter(vocab):
                 break
 
         if line.strip() in dictKey.keys():
-            print('made it here')
             result = dictKey[line.strip()][1]
             results = [result + ' ']
+            print(result)
             return results[state] if state < len(results) else None
 
         if parsed[0] in dictKey.keys():
