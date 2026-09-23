@@ -208,7 +208,6 @@ def customCompleter(vocab):
             else:
                 result = dictKey[line.strip()][1][0]
                 results = [result + ' '] + [None]
-                print(results)
                 return results[state]
 
         if ' ' in line and not test:
