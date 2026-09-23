@@ -191,6 +191,11 @@ def customCompleter(vocab):
                 test = True
                 break
 
+
+        print("LINE:", repr(line), file=sys.stderr)
+        print("TEXT:", repr(text), file=sys.stderr)
+        print("PARSED:", repr(parsed), file=sys.stderr)
+
         if line.strip() in dictKey.keys():
             result = dictKey[line.strip()][1]
             results = [result + ' ']
@@ -301,6 +306,7 @@ def main():
     vocab = updateSet(paths, set1=vocab)
 
     readline.parse_and_bind('tab: complete')
+    readline.set_completer_delims(' \t\n')
     readline.set_completer(customCompleter(vocab))
 
     while True:
