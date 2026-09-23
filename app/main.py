@@ -290,15 +290,17 @@ def updateSet(paths, testPath=False, set1=set(), fullPath=False):
 def completeFunc(parsed):
     if parsed[1] == '-p':
         cmd = parsed[-1]
-        if not dictKey.get(f'{cmd}'):
+        if not dictKey.get(cmd):
             sys.stderr.write(f'complete: {cmd}: no completion specification\n')
         else:
             sys.stdout.write(f"complete -C '{dictKey.get(cmd)}' {cmd}\n")
     if parsed[1] == '-C':
+
         response = ''
         try:
             response = subprocess.run(parsed[-2], capture_output=True)
             response = response.stdout.decode('utf-8').split('\n')
+            return
         except Exception:
             pass
         try:
@@ -306,9 +308,11 @@ def completeFunc(parsed):
                 dictKey.update({parsed[-1]: [parsed[-2], response]})
             else:
                 dictKey.update({parsed[-1]: [parsed[-2], False]})
+            return
         except Exception:
             pass
 
+        dictKey.update({parsed[-1]: parsed[-2]})
 
 def main():
 
