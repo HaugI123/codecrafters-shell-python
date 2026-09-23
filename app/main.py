@@ -206,9 +206,6 @@ def customCompleter(vocab):
                     results = output.stdout.splitlines()
                     result = [results[0] + ' '] + [None]
                     return result[state]
-            result = dictKey[line.strip()][1]
-            results = [result[0] + ' '] + [None]
-            return results[state]
 
 
         if ' ' in line and not test:
@@ -300,12 +297,12 @@ def completeFunc(parsed):
         try:
             response = subprocess.run(parsed[-2], capture_output=True)
             response = response.stdout.decode('utf-8').split('\n')
-        except FileNotFoundError:
+        except Exception:
             pass
         if response:
             dictKey.update({parsed[-1]: [parsed[-2], response]})
         else:
-            dictKey.update({f'{parsed[-1]}': f'{parsed[-2]}'})
+            dictKey.update({parsed[-1]: parsed[-2]})
 
 def main():
 
