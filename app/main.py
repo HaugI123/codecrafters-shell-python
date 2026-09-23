@@ -197,7 +197,12 @@ def customCompleter(vocab):
             return results[state] if state < len(results) else None
 
         if parsed[0] in dictKey.keys():
-            print('yee')
+            for value in dictKey[parsed[0]]:
+                if 'completer' in value.lower():
+                    output = subprocess.run([value, parsed[0], parsed[-1], parsed[-2]], capture_output=True, text=True)
+                    results = output.stdout.splitlines()
+                    result = [results + ' ']
+                    return result[state] if state<len(result) else None
 
         if ' ' in line and not test:
             tempSet = updateSet(parsed, fullPath=True)
