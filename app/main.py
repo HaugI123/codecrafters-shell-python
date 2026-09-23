@@ -200,7 +200,6 @@ def customCompleter(vocab):
         """
 
         if parsed[0] in dictKey.keys():
-            print(dictKey[parsed[0]])
             if 'completer' in dictKey[parsed[0]].lower():
                 output = subprocess.run([value, parsed[0], parsed[-1], parsed[-2]], capture_output=True, text=True)
                 results = output.stdout.splitlines()
