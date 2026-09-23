@@ -300,7 +300,6 @@ def completeFunc(parsed):
         try:
             response = subprocess.run(parsed[-2], capture_output=True)
             response = response.stdout.decode('utf-8').split('\n')
-            return
         except Exception:
             pass
         try:
