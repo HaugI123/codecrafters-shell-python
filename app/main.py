@@ -201,8 +201,7 @@ def customCompleter(vocab):
                 if 'completer' in value.lower():
                     output = subprocess.run([value, parsed[0], parsed[-1], parsed[-2]], capture_output=True, text=True)
                     results = output.stdout.splitlines()
-                    print(results)
-                    result = [results + ' '] + [None]
+                    result = [results[0] + ' '] + [None]
                     return result[state]
 
         if ' ' in line and not test:
