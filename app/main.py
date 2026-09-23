@@ -206,10 +206,7 @@ def customCompleter(vocab):
                 result = [results[0] + ' '] + [None]
                 return result[state]
             else:
-                print(dictKey[line.strip()][1][0])
-                results = ['ni']
-                return results[state]
-
+                return dictKey[line.strip()][1][0]
 
         if ' ' in line and not test:
             tempSet = updateSet(parsed, fullPath=True)
