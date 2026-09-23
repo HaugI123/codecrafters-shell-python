@@ -193,7 +193,8 @@ def customCompleter(vocab):
 
         if line.strip() in dictKey.keys():
             result = dictKey[line.strip()][1]
-            return line + result + ' '
+            results = [result + ' ']
+            return results[state] if state < len(results) else None
 
         if ' ' in line and not test:
             tempSet = updateSet(parsed, fullPath=True)
