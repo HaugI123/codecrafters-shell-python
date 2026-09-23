@@ -207,8 +207,9 @@ def customCompleter(vocab):
                 return result[state]
             else:
                 result = dictKey[line.strip()][1][0]
-                print(result)
-                return None
+                results = [result + ' '] + [None]
+                print(results)
+                return results[state]
 
         if ' ' in line and not test:
             tempSet = updateSet(parsed, fullPath=True)
