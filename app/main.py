@@ -297,7 +297,7 @@ def completeFunc(parsed):
         try:
             response = subprocess.run(parsed[-2], capture_output=True)
             response = response.stdout.decode('utf-8').split('\n')
-            print('made it here')
+            print(response)
         except Exception:
             pass
         if response:
