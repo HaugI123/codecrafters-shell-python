@@ -194,7 +194,7 @@ def customCompleter(vocab):
         if line.strip() in dictKey.keys():
             result = dictKey[line.strip()][1]
             results = [result + ' ']
-            print(result)
+            print('the fuck')
             return results[state] if state < len(results) else None
 
         if parsed[0] in dictKey.keys():
