@@ -199,9 +199,9 @@ def customCompleter(vocab):
                 env['COMP_POINT'] = str(readline.get_endidx())
 
                 output = subprocess.run([dictKey[parsed[0]][0], parsed[0], parsed[-1], parsed[-2]], capture_output=True, text=True, env=env)
-                results = output.stdout.splitlines()
-                result = [results + ' '] + [None]
-                print(result)
+                result = output.stdout.splitlines()
+                for x in result:
+                    print(x)
                 return result[state]
             else:
                 result = dictKey[line.strip()][1][0]
