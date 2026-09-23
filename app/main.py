@@ -301,6 +301,7 @@ def completeFunc(parsed):
         if response[0]:
             dictKey.update({parsed[-1]: [parsed[-2], response]})
         else:
+            print('did we make it here')
             dictKey.update({parsed[-1]: parsed[-2]})
 
 def main():
