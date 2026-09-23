@@ -296,7 +296,6 @@ def completeFunc(parsed):
         response = ''
         try:
             response = subprocess.run(parsed[-2], capture_output=True)
-            print(response)
             response = response.stdout.decode('utf-8').split('\n')
         except Exception:
             pass
@@ -304,6 +303,7 @@ def completeFunc(parsed):
             dictKey.update({parsed[-1]: [parsed[-2], response]})
         else:
             dictKey.update({parsed[-1]: parsed[-2]})
+            print(dictKey)
 
 def main():
 
