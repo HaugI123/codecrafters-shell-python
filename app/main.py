@@ -199,9 +199,7 @@ def customCompleter(vocab):
         if ' ' in line and not test:
             tempSet = updateSet(parsed, fullPath=True)
             results = [x for x in tempSet if x.startswith(text)] + [None]
-
-            result = results[state]
-            return result[len(text):]
+            return results[state]
 
         elif test:
             tempSet = updateSet(path, testPath=True, fullPath=True)
