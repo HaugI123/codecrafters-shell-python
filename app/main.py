@@ -279,13 +279,16 @@ def completeFunc(parsed):
         else:
             sys.stdout.write(f"complete -C '{dictKey.get(cmd)}' {cmd}\n")
     if parsed[1] == '-C':
-        #cKey.update({f'{parsed[-1]}': f'{parsed[-2]}'})
+        response = ''
         try:
             response = subprocess.run(parsed[-2], capture_output=True)
             response = response.stdout.decode('utf-8').split('\n')
         except FileNotFoundError:
             pass
-        dictKey.update({parsed[-1]: [parsed[-2], response[0]]})
+        if response:
+            dictKey.update({parsed[-1]: [parsed[-2], response[0]]})
+        else:
+            dictKey.update({f'{parsed[-1]}': f'{parsed[-2]}'})
 
 def main():
 
