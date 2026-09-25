@@ -327,8 +327,9 @@ def jobFunc(parsed, jobNum, cmd):
                 sys.stdout.write(f'[{tempList[0]}]-  {tempList[2]}{tempList[3]}\n')
             else:
                 sys.stdout.write(f'[{tempList[0]}]   {tempList[2]}{tempList[3]}\n')
-        if 'Done                    ' in jobsDict.values():
-            print('Did we nigga we made it?')
+        removalKeys = [key for key, value in jobsDict.items() if 'Done                    ' in value]
+        for key in removalKeys:
+            jobsDict.pop(key)
 
     if '&' in parsed:
         parsed.remove('&')
