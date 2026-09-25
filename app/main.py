@@ -349,7 +349,8 @@ def jobFunc(parsed, jobNum, cmd):
 
 def dynamicMarkerUpdater():
 
-    keyList = list(jobNumDict.keys()).sort()
+    keyList = list(jobNumDict.keys())
+    keyList.sort()
     maxVal = max(keyList)
 
     for key in jobNumDict.keys():
