@@ -319,7 +319,7 @@ def jobFunc(parsed, jobNum, cmd):
         for key in jobsDict.keys():
             tempList = jobsDict[key]
             sys.stdout.write(f'[{tempList[0]}]{tempList[1]}  {tempList[2]}                 {tempList[3]}\n')
-            return
+        return
     backJob = subprocess.Popen(parsed)
     sys.stdout.write(f'[{jobNum}] {backJob.pid}\n')
     jobsDict.update({backJob.pid: [jobNum, '+', 'Running', cmd]})
