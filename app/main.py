@@ -318,17 +318,22 @@ def jobFunc(parsed, jobNum, cmd):
     if len(parsed) == 1:
         for key in jobsDict.keys():
             tempList = jobsDict[key]
+            if tempList[-1].poll() is not None:
+                tempList[2] == 'Done                    '
+                tempList[3] = tempList[3].replace('&', '')
             if tempList[0] == (jobNum-1):
-                sys.stdout.write(f'[{tempList[0]}]{tempList[1]}  {tempList[2]}                 {tempList[3]}\n')
+                sys.stdout.write(f'[{tempList[0]}]{tempList[1]}  {tempList[2]}{tempList[3]}\n')
             elif tempList[0] == (jobNum-2):
-                sys.stdout.write(f'[{tempList[0]}]-  {tempList[2]}                 {tempList[3]}\n')
+                sys.stdout.write(f'[{tempList[0]}]-  {tempList[2]}{tempList[3]}\n')
             else:
-                sys.stdout.write(f'[{tempList[0]}]   {tempList[2]}                 {tempList[3]}\n')
+                sys.stdout.write(f'[{tempList[0]}]   {tempList[2]}{tempList[3]}\n')
+            if tempList[2] == 'Done                    ':
+                jobsDict.pop(key)
     if '&' in parsed:
         parsed.remove('&')
         backJob = subprocess.Popen(parsed)
         sys.stdout.write(f'[{jobNum}] {backJob.pid}\n')
-        jobsDict.update({backJob.pid: [jobNum, '+', 'Running', cmd]})
+        jobsDict.update({backJob.pid: [jobNum, '+', 'Running                 ', cmd, backJob]})
         jobNum +=1
     return jobNum
 
