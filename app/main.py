@@ -327,8 +327,9 @@ def jobFunc(parsed, jobNum, cmd):
                 sys.stdout.write(f'[{tempList[0]}]-  {tempList[2]}{tempList[3]}\n')
             else:
                 sys.stdout.write(f'[{tempList[0]}]   {tempList[2]}{tempList[3]}\n')
-            if tempList[2] == 'Done                    ':
-                jobsDict.pop(key)
+        if 'Done                    ' in jobsDict.values():
+            print('Did we nigga we made it?')
+            jobsDict = {key: value for key, value in jobsDict.items() if 'Done                    ' not in value}
     if '&' in parsed:
         parsed.remove('&')
         backJob = subprocess.Popen(parsed)
