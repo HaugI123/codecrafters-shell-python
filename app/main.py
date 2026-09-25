@@ -5,6 +5,7 @@ import subprocess
 from pathlib import Path
 
 dictKey = dict()
+jobsDict = dict()
 
 def myParser(arg):
 
@@ -313,11 +314,15 @@ def completeFunc(parsed):
     if parsed[1] == '-r':
         dictKey.pop(parsed[-1])
 
-def jobFunc(parsed, jobNum):
+def jobFunc(parsed, jobNum, cmd):
     if len(parsed) == 1:
-        return
+        for key in jobsDict.keys():
+            tempList = jobsDict[key]
+            sys.stdout.write(f'[{tempList[0]}]{tempList[1]}  {tempList[2]}                 {tempList[3]}\n')
+            return
     backJob = subprocess.Popen(parsed)
     sys.stdout.write(f'[{jobNum}] {backJob.pid}\n')
+    jobsDict.update({backJob.pid: [jobNum, '+', 'Running', cmd]})
     jobNum +=1
     return jobNum
 
@@ -367,7 +372,7 @@ def main():
             case 'complete':
                 completeFunc(parsed)
             case 'jobs':
-                job = jobFunc(parsed, job)
+                job = jobFunc(parsed, job, command)
             case _:
                 runProg(paths, cmdName, command, parsed)
 
