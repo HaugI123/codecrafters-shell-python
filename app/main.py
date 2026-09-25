@@ -319,6 +319,7 @@ def jobFunc(parsed, jobNum, cmd):
         for key in jobsDict.keys():
             tempList = jobsDict[key]
             if tempList[-1].poll() is not None:
+                print('did we make it here')
                 tempList[2] == 'Done                    '
                 tempList[3] = tempList[3].replace('&', '')
             if tempList[0] == (jobNum-1):
