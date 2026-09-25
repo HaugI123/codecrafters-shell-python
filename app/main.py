@@ -319,18 +319,19 @@ def jobFunc(parsed, jobNum, cmd):
 
     if len(parsed) == 1:
         for key in jobsDict.keys():
+
+            for newKey in jobNumDict.keys():
+                if newKey == jobsDict[key][0]:
+                    jobsDict[key][1] = jobNumDict[newKey]
+
             tempList = jobsDict[key]
+
             if tempList[-1].poll() is not None:
                 tempList[2] = 'Done                    '
                 tempList[3] = tempList[3].replace('&', '')
-            if len(jobsDict) == 1:
-                sys.stdout.write(f'[{tempList[0]}]{tempList[1]}  {tempList[2]}{tempList[3]}\n')
-            elif tempList[0] == (jobNum-1):
-                sys.stdout.write(f'[{tempList[0]}]{tempList[1]}  {tempList[2]}{tempList[3]}\n')
-            elif tempList[0] == (jobNum-2):
-                sys.stdout.write(f'[{tempList[0]}]-  {tempList[2]}{tempList[3]}\n')
-            else:
-                sys.stdout.write(f'[{tempList[0]}]   {tempList[2]}{tempList[3]}\n')
+
+            sys.stdout.write(f'[{tempList[0]}]{tempList[1]}  {tempList[2]}{tempList[3]}\n')
+
         removalKeys = [key for key, value in jobsDict.items() if 'Done                    ' in value]
         for key in removalKeys:
             jobsDict.pop(key)
