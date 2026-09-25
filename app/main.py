@@ -335,6 +335,7 @@ def jobFunc(parsed, jobNum, cmd):
         removalKeys = [key for key, value in jobsDict.items() if 'Done                    ' in value]
         for key in removalKeys:
             jobsDict.pop(key)
+            dynamicMarkerUpdater()
 
     if '&' in parsed:
         parsed.remove('&')
