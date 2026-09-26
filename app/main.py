@@ -318,6 +318,7 @@ def completeFunc(parsed):
 def jobFunc(parsed, jobNum, cmd):
 
     if len(parsed) == 1:
+        dynamicMarkerUpdater()
         for key in jobsDict.keys():
 
             for newKey in jobNumDict.keys():
@@ -334,8 +335,8 @@ def jobFunc(parsed, jobNum, cmd):
 
         removalKeys = [key for key, value in jobsDict.items() if 'Done                    ' in value]
         for key in removalKeys:
+            jobNumDict.pop(jobsDict[key][0])
             jobsDict.pop(key)
-            dynamicMarkerUpdater()
 
     if '&' in parsed:
         parsed.remove('&')
@@ -352,15 +353,16 @@ def dynamicMarkerUpdater():
 
     keyList = list(jobNumDict.keys())
     keyList.sort()
-    maxVal = max(keyList)
+    if keyList:
+        maxVal = max(keyList)
 
     for key in jobNumDict.keys():
         if key == maxVal:
             jobNumDict[key] = '+'
         elif len(keyList) == 2:
             if key != maxVal:
-                print('made it here again')
                 jobNumDict[key] = '-'
+                print('KEY AND VALUE: ', key, jobNumDict[key])
         elif len(keyList) > 2:
             if key == keyList[-2]:
                 jobNumDict[key] = '-'
