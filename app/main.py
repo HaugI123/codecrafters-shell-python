@@ -362,7 +362,6 @@ def dynamicMarkerUpdater():
         elif len(keyList) == 2:
             if key != maxVal:
                 jobNumDict[key] = '-'
-                print('KEY AND VALUE: ', key, jobNumDict[key])
         elif len(keyList) > 2:
             if key == keyList[-2]:
                 jobNumDict[key] = '-'
