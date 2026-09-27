@@ -318,7 +318,25 @@ def completeFunc(parsed):
 def jobFunc(parsed, jobNum, cmd):
 
     if len(parsed) == 1:
-        backgroundJobsTest()
+        dynamicMarkerUpdater()
+        for key in jobsDict.keys():
+
+            for newKey in jobNumDict.keys():
+                if newKey == jobsDict[key][0]:
+                    jobsDict[key][1] = jobNumDict[newKey]
+
+            tempList = jobsDict[key]
+
+            if tempList[-1].poll() is not None:
+                tempList[2] = 'Done                    '
+                tempList[3] = tempList[3].replace('&', '')
+
+            sys.stdout.write(f'[{tempList[0]}]{tempList[1]}  {tempList[2]}{tempList[3]}\n')
+
+        removalKeys = [key for key, value in jobsDict.items() if 'Done                    ' in value]
+        for key in removalKeys:
+            jobNumDict.pop(jobsDict[key][0])
+            jobsDict.pop(key)
 
     if '&' in parsed:
         parsed.remove('&')
@@ -344,8 +362,7 @@ def backgroundJobsTest():
         if tempList[-1].poll() is not None:
             tempList[2] = 'Done                    '
             tempList[3] = tempList[3].replace('&', '')
-
-        sys.stdout.write(f'[{tempList[0]}]{tempList[1]}  {tempList[2]}{tempList[3]}\n')
+            sys.stdout.write(f'[{tempList[0]}]{tempList[1]}  {tempList[2]}{tempList[3]}\n')
 
     removalKeys = [key for key, value in jobsDict.items() if 'Done                    ' in value]
     for key in removalKeys:
