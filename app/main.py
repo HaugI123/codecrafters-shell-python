@@ -335,7 +335,7 @@ def jobFunc(parsed, jobNum, cmd):
 
         removalKeys = [key for key, value in jobsDict.items() if 'Done                    ' in value]
         for key in removalKeys:
-            jobNumDict.pop(jobsDict[key][0])
+            jobNumDict.update({jobsDict[key][0]: ['', 'free']})
             jobsDict.pop(key)
 
     if '&' in parsed:
@@ -343,8 +343,12 @@ def jobFunc(parsed, jobNum, cmd):
         backJob = subprocess.Popen(parsed)
         sys.stdout.write(f'[{jobNum}] {backJob.pid}\n')
         jobsDict.update({backJob.pid: [jobNum, '+', 'Running                 ', cmd, backJob]})
-        jobNumDict.update({jobNum: ''})
-        jobNum +=1
+        jobNumDict.update({jobNum: ['', 'used']})
+        jobNum += 1
+
+    for key, value in jobNumDict.items():
+        if 'free' in value:
+            jobNum = key
 
     dynamicMarkerUpdater()
     return jobNum
@@ -366,8 +370,9 @@ def backgroundJobsTest():
 
     removalKeys = [key for key, value in jobsDict.items() if 'Done                    ' in value]
     for key in removalKeys:
-        jobNumDict.pop(jobsDict[key][0])
+        jobNumDict.update({jobsDict[key][0]: ['', 'free']})
         jobsDict.pop(key)
+
 
 def dynamicMarkerUpdater():
 
@@ -378,15 +383,15 @@ def dynamicMarkerUpdater():
 
     for key in jobNumDict.keys():
         if key == maxVal:
-            jobNumDict[key] = '+'
+            jobNumDict[key] = ['+', 'used']
         elif len(keyList) == 2:
             if key != maxVal:
-                jobNumDict[key] = '-'
+                jobNumDict[key] = ['-', 'used']
         elif len(keyList) > 2:
             if key == keyList[-2]:
-                jobNumDict[key] = '-'
+                jobNumDict[key] = ['-', 'used']
             else:
-                jobNumDict[key] = ' '
+                jobNumDict[key] = [' ', 'used']
 
     return
 
