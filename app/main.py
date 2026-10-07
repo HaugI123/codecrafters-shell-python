@@ -33,7 +33,7 @@ def myParser(arg):
             specState = False
             continue
 
-        if char == " " and not specState and char != '\\':
+        if char == " " and not specState:
             if tempStr:
                 endList.append(tempStr)
                 tempStr = ''
@@ -331,7 +331,7 @@ def jobFunc(parsed, jobNum, cmd):
                 tempList[2] = 'Done                    '
                 tempList[3] = tempList[3].replace('&', '')
 
-            sys.stdout.write(f'[{tempList[0]}]{tempList[1]}  {tempList[2]}{tempList[3]}\n')
+            sys.stdout.write(f'[{tempList[0]}]{tempList[1][0]}  {tempList[2]}{tempList[3]}\n')
 
         removalKeys = [key for key, value in jobsDict.items() if 'Done                    ' in value]
         for key in removalKeys:
@@ -346,9 +346,7 @@ def jobFunc(parsed, jobNum, cmd):
         jobNumDict.update({jobNum: ['', 'used']})
         jobNum += 1
 
-    for key, value in jobNumDict.items():
-        if 'free' in value:
-            jobNum = key
+    jobNum = jobNumUpdater(jobNum)
 
     dynamicMarkerUpdater()
     return jobNum
@@ -376,12 +374,14 @@ def backgroundJobsTest():
 
 def dynamicMarkerUpdater():
 
-    keyList = list(jobNumDict.keys())
+    keyList = [key for key,value in jobNumDict.items() if 'free' not in value]
     keyList.sort()
     if keyList:
         maxVal = max(keyList)
 
     for key in jobNumDict.keys():
+        if 'free' in jobNumDict[key]: #Added this check so it stopped overwritting 'free'
+            break
         if key == maxVal:
             jobNumDict[key] = ['+', 'used']
         elif len(keyList) == 2:
@@ -394,6 +394,17 @@ def dynamicMarkerUpdater():
                 jobNumDict[key] = [' ', 'used']
 
     return
+
+def jobNumUpdater(curNum):
+
+        jobNumList = [key for key,value in jobNumDict.items() if 'free' in value]
+
+        if not jobNumList:
+            return curNum
+
+        jobNumList.sort()
+
+        return min(jobNumList)
 
 def main():
 
