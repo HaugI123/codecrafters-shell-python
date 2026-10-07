@@ -395,6 +395,8 @@ def dynamicMarkerUpdater():
 
     return
 
+#Did 2 things for recycling job numbers. Added the if 'free' check inside of dynamicMarkerUpdater() so it stopped overwritting every value in th edictionary. Also added a jobNumUpdater() function to update the job number. It iterates over every free key inside the jobNumDict and selects the minimum key as the recycled job num. It does cause some bugs that I can adjust later just trying to see functionally if it works.
+
 def jobNumUpdater(curNum):
 
         jobNumList = [key for key,value in jobNumDict.items() if 'free' in value]
