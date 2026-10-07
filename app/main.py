@@ -364,7 +364,7 @@ def backgroundJobsTest():
         if tempList[-1].poll() is not None:
             tempList[2] = 'Done                    '
             tempList[3] = tempList[3].replace('&', '')
-            sys.stdout.write(f'[{tempList[0]}]{tempList[1]}  {tempList[2]}{tempList[3]}\n')
+            sys.stdout.write(f'[{tempList[0]}]{tempList[1][0]}  {tempList[2]}{tempList[3]}\n')
 
     removalKeys = [key for key, value in jobsDict.items() if 'Done                    ' in value]
     for key in removalKeys:
@@ -380,7 +380,7 @@ def dynamicMarkerUpdater():
         maxVal = max(keyList)
 
     for key in jobNumDict.keys():
-        if 'free' in jobNumDict[key]: #Added this check so it stopped overwritting 'free'
+        if 'free' in jobNumDict[key]:
             break
         if key == maxVal:
             jobNumDict[key] = ['+', 'used']
