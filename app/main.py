@@ -371,7 +371,6 @@ def backgroundJobsTest():
         jobNumDict.update({jobsDict[key][0]: ['', 'free']})
         jobsDict.pop(key)
 
-
 def dynamicMarkerUpdater():
 
     keyList = [key for key,value in jobNumDict.items() if 'free' not in value]
@@ -424,6 +423,7 @@ def main():
 
     while True:
         backgroundJobsTest()
+        job = jobNumUpdater(job)
         command = input("$ ")
         parsed = myParser(command)
         cmdName = parsed[0]
