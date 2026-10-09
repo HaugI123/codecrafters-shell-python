@@ -428,7 +428,7 @@ def pipeFunc(parsed):
     p = subprocess.Popen(cmd1, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     p2 = subprocess.Popen(cmd2, stdin=p.stdout, stdout=subprocess.PIPE)
     output = p2.communicate()[0]
-    sys.stdout.write(output)
+    sys.stdout.write(str(output, 'utf-8'))
 
     return
 
