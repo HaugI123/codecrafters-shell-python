@@ -426,9 +426,9 @@ def pipeFunc(parsed):
     cmd2 = parsed[locationOfPipe+1:]
 
     p = subprocess.Popen(cmd1, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    output, error = p.communicate() #Might not need this
-    p2 = subprocess.Popen(cmd2, stdin=subprocess.PIPE)
-    sys.stdout.write(p2.stdout)
+    p2 = subprocess.Popen(cmd2, stdin=p.stdout, stdout=subprocess.PIPE)
+    output = p2.communicate()[0]
+    sys.stdout.write(output)
 
     return
 
