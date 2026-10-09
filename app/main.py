@@ -427,10 +427,8 @@ def pipeFunc(parsed):
 
     p = subprocess.Popen(cmd1, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output, error = p.communicate() #Might not need this
-    p2 = subprocess.Popen(cmd2, stdin=subprocess.PIPE)
+    p2 = subprocess.Popen(cmd2, stdin=output)
     output, error = p2.communicate()
-
-    print(output)
 
     return
 
