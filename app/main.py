@@ -72,21 +72,28 @@ def echoFunc(parsed):
     for i, string in enumerate(parsed):
 
         if i == 0:
+            #adding the word echo
             finParsed.append(string)
             continue
 
         if string == ' ':
+            #Continuing the string I actually dont think this does anything my parser removes spaces IDKY I implemented this
             tempStr += string
+            print(tempStr) #Yeah this never prints pretty sure it does nothing atm. Unless I was using it for '' or "" logic.
             continue
 
         if tempStr and not tempStr.endswith(' '):
+            #if valid tempString (a word was added based on what was parsed) then add a space before adding the next word
             tempStr += ' '
 
+        #add word to tempStr
         tempStr += string
 
+        #For index if at the end of the parsed list length append the new string - whitespace from the left to the final parsed list. IDKY I did lstrip() must have thought it necessary when building it though.
         if i == len(parsed)-1:
             finParsed.append(tempStr.lstrip())
 
+    #Output value that makes it to final list in index 1
     sys.stdout.write(f'{finParsed[1]}\n')
 
 def typeFunc(builtIns, command, paths):
@@ -234,7 +241,6 @@ def customCompleter(vocab):
     return complete
 
 def updateSet(paths, testPath=False, set1=set(), fullPath=False):
-
 
     if testPath and fullPath:
         set2 = set()
@@ -394,18 +400,40 @@ def dynamicMarkerUpdater():
 
     return
 
-#Did 2 things for recycling job numbers. Added the if 'free' check inside of dynamicMarkerUpdater() so it stopped overwritting every value in th edictionary. Also added a jobNumUpdater() function to update the job number. It iterates over every free key inside the jobNumDict and selects the minimum key as the recycled job num. It does cause some bugs that I can adjust later just trying to see functionally if it works.
+#Did 2 things for recycling job numbers. Added the if 'free' check inside of dynamicMarkerUpdater() so it stopped overwritting every value in th edictionary. Also added a jobNumUpdater() function to update the job number. It iterates over every free key inside the jobNumDict and selects the minimum key as the recycled job num. It does cause some bugs that I can adjust later just trying to see functionally if it works. I did pass, the bug is that jobs prints out of order. I will check normal shell to see if that is how it works or if it prints in order. NVM seems like bash doesnt recycle job numbers yeah it does it was just behaving weirdly pretty sure it prints in order of job number though need to fix that bug
 
 def jobNumUpdater(curNum):
+    """Function to update job number based on available numbers"""
 
-        jobNumList = [key for key,value in jobNumDict.items() if 'free' in value]
+    jobNumList = [key for key,value in jobNumDict.items() if 'free' in value]
 
-        if not jobNumList:
-            return curNum
+    if not jobNumList:
+        return curNum
 
-        jobNumList.sort()
+    jobNumList.sort()
 
-        return min(jobNumList)
+    return min(jobNumList)
+
+
+def pipeFunc(parsed):
+
+    #First thought need to do parsing like I do inside echo. Not sure if I should duplicate the code or create another parser function specific to this use case of building a list with the information split at the pipe delimeter. Actually I think it would be much easier to just loop over the parsed list already, run subproccess.Popen(parsed[previousIndex:indexOf|], stdout=subprocess.PIPE, stderr=subprocess.PIPE) update the previous index to current indexOf|, check for another | in list if not one then indexOf| = -1 use output, error = subprocessetc.etc.communicate() and pass output as input in the next subprocess.Popen() call. Have it recursively do this until there are no more | found in the parsed list.
+
+
+    #Initial logic only assumes a single | operator.
+    locationOfPipe = parsed.index('|')
+    cmd1 = parsed[:locationOfPipe]
+    cmd2 = parsed[locationOfPipe+1:]
+
+    p = subprocess.Popen(cmd1, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    output, error = p.communicate() #Might not need this
+    p2 = subprocess.Popen(cmd2, stdin=subprocess.PIPE)
+    output, error = p2.communicate()
+
+    print(output)
+
+    return
+
 
 def main():
 
@@ -433,8 +461,12 @@ def main():
             cmdName = 'append'
         elif parsed[-1] == '&':
             cmdName = 'jobs'
+        elif '|' in parsed:
+            cmdName = 'pipe'
 
         match cmdName:
+            case 'pipe':
+                pipeFunc(parsed)
             case 'exit':
                 break
             case 'echo':
