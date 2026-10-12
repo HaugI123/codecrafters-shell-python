@@ -425,11 +425,17 @@ def pipeFunc(parsed):
     cmd1 = parsed[:locationOfPipe]
     cmd2 = parsed[locationOfPipe+1:]
 
+    print(cmd1)
+
     p = subprocess.Popen(cmd1, stdout=subprocess.PIPE)
     p2 = subprocess.Popen(cmd2, stdin=p.stdout, stdout=subprocess.PIPE)
     p.stdout.close()
-    output = p2.communicate()[0]
-    sys.stdout.write(str(output, 'utf-8'))
+
+    for line in p2.stdout:
+        sys.stdout.write(line.decode('utf-8'))
+        sys.stdout.flush()
+
+    p2.wait()
 
     return
 
