@@ -425,14 +425,20 @@ def pipeFunc(parsed):
     cmd1 = parsed[:locationOfPipe]
     cmd2 = parsed[locationOfPipe+1:]
 
+    #run both commands
+    #use the output of the 1st command as the input of the second
+    #close the I/O stream for 1st command
     p = subprocess.Popen(cmd1, stdout=subprocess.PIPE)
     p2 = subprocess.Popen(cmd2, stdin=p.stdout, stdout=subprocess.PIPE)
     p.stdout.close()
 
+
+    #iterate over stdout for second command, write lines as they become available. Decode with utf-8 because it returns as bytes. Remove from buffer after writing
     for line in p2.stdout:
         sys.stdout.write(line.decode('utf-8'))
         sys.stdout.flush()
 
+    #Waits for process to finish before moving on
     p2.wait()
 
     return
