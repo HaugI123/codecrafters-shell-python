@@ -485,6 +485,9 @@ def cmdToRun(paths, cmdName, command, parsed, job):
         case _:
             runProg(paths, cmdName, command, parsed)
 
+    return job
+
+
 def main():
 
     paths = os.environ['PATH'].split(':')
@@ -506,7 +509,7 @@ def main():
         cmdName = parsed[0]
         if cmdName == 'exit':
             break
-        cmdToRun(paths, cmdName, command, parsed, job)
+        job = cmdToRun(paths, cmdName, command, parsed, job)
 
     pass
 
