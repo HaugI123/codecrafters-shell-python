@@ -7,6 +7,7 @@ from pathlib import Path
 dictKey = dict()
 jobsDict = dict()
 jobNumDict = dict()
+builtIns = ['type', 'exit', 'echo', 'pwd', 'complete', 'jobs']
 
 def myParser(arg):
 
@@ -415,15 +416,20 @@ def jobNumUpdater(curNum):
     return min(jobNumList)
 
 
-def pipeFunc(parsed):
+def pipeFunc(paths, cmdName, command, parsed, job):
 
     #First thought need to do parsing like I do inside echo. Not sure if I should duplicate the code or create another parser function specific to this use case of building a list with the information split at the pipe delimeter. Actually I think it would be much easier to just loop over the parsed list already, run subproccess.Popen(parsed[previousIndex:indexOf|], stdout=subprocess.PIPE, stderr=subprocess.PIPE) update the previous index to current indexOf|, check for another | in list if not one then indexOf| = -1 use output, error = subprocessetc.etc.communicate() and pass output as input in the next subprocess.Popen() call. Have it recursively do this until there are no more | found in the parsed list.
+
 
 
     #Initial logic only assumes a single | operator.
     locationOfPipe = parsed.index('|')
     cmd1 = parsed[:locationOfPipe]
     cmd2 = parsed[locationOfPipe+1:]
+
+    if cmd2[0] in builtIns:
+        cmdToRun(paths, cmd2[0], command, cmd2, job)
+        return
 
     #run both commands
     #use the output of the 1st command as the input of the second
@@ -443,10 +449,44 @@ def pipeFunc(parsed):
 
     return
 
+def cmdToRun(paths, cmdName, command, parsed, job):
+    if any(st in parsed for st in ('>', '1>', '2>')):
+        cmdName = 'redirect'
+    elif any(st in parsed for st in ('>>', '1>>', '2>>')):
+        cmdName = 'append'
+    elif parsed[-1] == '&':
+        cmdName = 'jobs'
+    elif '|' in parsed:
+        cmdName = 'pipe'
+
+    match cmdName:
+        case 'pipe':
+            pipeFunc(paths, cmdName, command, parsed, job)
+        case 'echo':
+            echoFunc(parsed)
+        case 'exit':
+            exit
+        case 'type':
+            typeFunc(builtIns, parsed[1], paths)
+        case 'pwd':
+            sys.stdout.write(f'{os.getcwd()}\n')
+        case 'cd':
+            cdFunc(parsed[1])
+        case 'cat':
+            catFunc(parsed)
+        case 'redirect':
+            redirectFunc(parsed[-1], parsed)
+        case 'append':
+            appendFunc(parsed[-1], parsed)
+        case 'complete':
+            completeFunc(parsed)
+        case 'jobs':
+            job = jobFunc(parsed, job, command)
+        case _:
+            runProg(paths, cmdName, command, parsed)
 
 def main():
 
-    builtIns = ['type', 'exit', 'echo', 'pwd', 'complete', 'jobs']
     paths = os.environ['PATH'].split(':')
 
     vocab = set([x+' ' for x in builtIns])
@@ -464,40 +504,9 @@ def main():
         command = input("$ ")
         parsed = myParser(command)
         cmdName = parsed[0]
-        if any(st in parsed for st in ('>', '1>', '2>')):
-            cmdName = 'redirect'
-        elif any(st in parsed for st in ('>>', '1>>', '2>>')):
-            cmdName = 'append'
-        elif parsed[-1] == '&':
-            cmdName = 'jobs'
-        elif '|' in parsed:
-            cmdName = 'pipe'
-
-        match cmdName:
-            case 'pipe':
-                pipeFunc(parsed)
-            case 'exit':
-                break
-            case 'echo':
-                echoFunc(parsed)
-            case 'type':
-                typeFunc(builtIns, parsed[1], paths)
-            case 'pwd':
-                sys.stdout.write(f'{os.getcwd()}\n')
-            case 'cd':
-                cdFunc(parsed[1])
-            case 'cat':
-                catFunc(parsed)
-            case 'redirect':
-                redirectFunc(parsed[-1], parsed)
-            case 'append':
-                appendFunc(parsed[-1], parsed)
-            case 'complete':
-                completeFunc(parsed)
-            case 'jobs':
-                job = jobFunc(parsed, job, command)
-            case _:
-                runProg(paths, cmdName, command, parsed)
+        if cmdName == 'exit':
+            break
+        cmdToRun(paths, cmdName, command, parsed, job)
 
     pass
 
