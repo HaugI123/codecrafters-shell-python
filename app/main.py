@@ -527,15 +527,24 @@ def cmdToRun(paths, cmdName, command, parsed, job):
         case 'jobs':
             job = jobFunc(parsed, job, command)
         case 'history':
-            historyFunc(int(parsed[1]))
+            if len(parsed)>1:
+                historyFunc(int(parsed[1]))
+            else:
+                historyFunc(0)
         case _:
             runProg(paths, cmdName, command, parsed)
 
     return job
 
 def historyFunc(n):
-    for count,cmd in enumerate(historyList[n:]):
-        sys.stdout.write(f'{count+n} {cmd}')
+    if n>0:
+        tempHistList = historyList[-n:]
+        start = len(historyList) - len(tempHistList)
+    else:
+        tempHistList = historyList
+        start = 0
+    for count,cmd in enumerate(tempHistList, start=start+1):
+        sys.stdout.write(f'{count} {cmd}')
 
 def main():
 
@@ -555,10 +564,11 @@ def main():
         job = jobNumUpdater(job)
         command = input("$ ")
         parsed = myParser(command)
-        cmdName = parsed[0]
-        if cmdName == 'exit':
-            break
-        job = cmdToRun(paths, cmdName, command, parsed, job)
+        if parsed:
+            cmdName = parsed[0]
+            if cmdName == 'exit':
+                break
+            job = cmdToRun(paths, cmdName, command, parsed, job)
 
     pass
 
