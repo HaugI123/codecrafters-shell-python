@@ -500,7 +500,7 @@ def cmdToRun(paths, cmdName, command, parsed, job):
     elif '|' in parsed:
         cmdName = 'pipe'
 
-    if cmdName != 'pipe' and cmdName != 'history':
+    if cmdName != 'pipe':
         historyList.append(command+'\n')
 
     match cmdName:
