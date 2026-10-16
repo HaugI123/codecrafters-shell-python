@@ -420,32 +420,67 @@ def pipeFunc(paths, cmdName, command, parsed, job):
 
     #First thought need to do parsing like I do inside echo. Not sure if I should duplicate the code or create another parser function specific to this use case of building a list with the information split at the pipe delimeter. Actually I think it would be much easier to just loop over the parsed list already, run subproccess.Popen(parsed[previousIndex:indexOf|], stdout=subprocess.PIPE, stderr=subprocess.PIPE) update the previous index to current indexOf|, check for another | in list if not one then indexOf| = -1 use output, error = subprocessetc.etc.communicate() and pass output as input in the next subprocess.Popen() call. Have it recursively do this until there are no more | found in the parsed list.
 
+    #many pipe logic
+    numOfPipeDelims = parsed.count('|')
+    if numOfPipeDelims>1:
+        #thought process is to get the index of first pipe run cmd update parsed to be the rest of the code get the next and cycle etc. for or while loop?? I think while but I tend to use for. Ill implement both see what is easier. During while implementation I realized I didnt know how to "verify" that I was on the last command for loops seem easier since I can do a range based on numOfPipeDelims and if x and numOfPipeDelims == then I know I am at the end. Thought I could get while loops to work dont think I can switching to for loop now
+        output = subprocess.PIPE
+        '''while '|' in parsed:
+            pipe = parsed.index('|')
+            cmd = parsed[:pipe]
 
+            p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stdin=output)
+
+            output = p.stdout
+
+            parsed = parsed[pipe+1:]
+        '''
+
+        for x in range(numOfPipeDelims+1):
+            #THERE HAS TO BE A BETTER WAY TO DO THIS I AM JUST MESSING SOMETHING UP AND DONT SEE IT.
+            try:
+                pipe = parsed.index('|')
+                cmd = parsed[:pipe]
+            except ValueError:
+                cmd = parsed
+                if cmd[0] in builtIns:
+                    cmdToRun(paths, cmd[0], command, cmd, job)
+                    return
+
+            p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stdin=output)
+            output = p.stdout
+            parsed = parsed[pipe+1:]
+
+        if '|' not in parsed:
+            for line in p.stdout:
+                sys.stdout.write(line.decode('utf-8'))
+                sys.stdout.flush()
 
     #Initial logic only assumes a single | operator.
-    locationOfPipe = parsed.index('|')
-    cmd1 = parsed[:locationOfPipe]
-    cmd2 = parsed[locationOfPipe+1:]
+    if numOfPipeDelims == 1:
+        locationOfPipe = parsed.index('|')
+        cmd1 = parsed[:locationOfPipe]
+        cmd2 = parsed[locationOfPipe+1:]
 
-    if cmd2[0] in builtIns:
-        cmdToRun(paths, cmd2[0], command, cmd2, job)
-        return
+        if cmd2[0] in builtIns:
+            cmdToRun(paths, cmd2[0], command, cmd2, job)
+            return
 
-    #run both commands
-    #use the output of the 1st command as the input of the second
-    #close the I/O stream for 1st command
-    p = subprocess.Popen(cmd1, stdout=subprocess.PIPE)
-    p2 = subprocess.Popen(cmd2, stdin=p.stdout, stdout=subprocess.PIPE)
-    p.stdout.close()
+        #run both commands
+        #use the output of the 1st command as the input of the second
+        #close the I/O stream for 1st command
+        p = subprocess.Popen(cmd1, stdout=subprocess.PIPE)
+        p2 = subprocess.Popen(cmd2, stdin=p.stdout, stdout=subprocess.PIPE)
+        p.stdout.close()
 
 
-    #iterate over stdout for second command, write lines as they become available. Decode with utf-8 because it returns as bytes. Remove from buffer after writing
-    for line in p2.stdout:
-        sys.stdout.write(line.decode('utf-8'))
-        sys.stdout.flush()
+        #iterate over stdout for second command, write lines as they become available. Decode with utf-8 because it returns as bytes. Remove from buffer after writing
+        for line in p2.stdout:
+            sys.stdout.write(line.decode('utf-8'))
+            sys.stdout.flush()
 
-    #Waits for process to finish before moving on
-    p2.wait()
+        #Waits for process to finish before moving on
+        p2.wait()
 
     return
 
