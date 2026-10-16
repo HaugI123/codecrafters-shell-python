@@ -527,17 +527,18 @@ def cmdToRun(paths, cmdName, command, parsed, job):
         case 'jobs':
             job = jobFunc(parsed, job, command)
         case 'history':
-            if len(parsed)>1:
-                historyFunc(int(parsed[1]))
-            else:
-                historyFunc(0)
+            historyFunc(parsed)
         case _:
             runProg(paths, cmdName, command, parsed)
 
     return job
 
-def historyFunc(n):
+def historyFunc(parsed):
     #This implements the n flag for history, returns every command from n to end of history list. Automatically passed control P / up arrow implementation because readline automatically includes it. Cool I guess but I would like to implement something like that myself in the future version. Idea for how I would do it normally: check for keypad up press (find out how to do that in python) if keypad up is pressed edit current line/stream with the last item in historyList. Find way to reverse iterate over historyList could use historyList.reverse() I think or something like that or find a way to iterate like x = -1 historyList[-1] then x = -2 historyList[-2] ... etc until hit the length of historyList. Down arrow navigation also auto passed. Probably gonna be like that for the next few testing items. Will notate them all here: up arrow, down arrow, execute commands from history? (if you stop at a command with up/down arrow and press enter the command executes properly), that was it for the time being.
+    if len(parsed)>1 and parsed[1] == '-r':
+        print('hello')
+        return
+    n = int(parsed[1]) if len(parsed)>1 and parsed[1].isdigit() else 0
     if n>0:
         tempHistList = historyList[-n:]
         start = len(historyList) - len(tempHistList)
@@ -546,9 +547,6 @@ def historyFunc(n):
         start = 0
     for count,cmd in enumerate(tempHistList, start=start+1):
         sys.stdout.write(f'{count} {cmd}')
-
-    if parsed[1] == '-r':
-        print('hello')
 
 def main():
 
