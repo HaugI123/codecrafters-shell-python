@@ -527,14 +527,14 @@ def cmdToRun(paths, cmdName, command, parsed, job):
         case 'jobs':
             job = jobFunc(parsed, job, command)
         case 'history':
-            historyFunc()
+            historyFunc(parsed[1])
         case _:
             runProg(paths, cmdName, command, parsed)
 
     return job
 
-def historyFunc():
-    for count,cmd in enumerate(historyList):
+def historyFunc(n):
+    for count,cmd in enumerate(historyList[n:]):
         sys.stdout.write(f'{count+1} {cmd}')
 
 def main():
