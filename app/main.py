@@ -7,7 +7,7 @@ from pathlib import Path
 dictKey = dict()
 jobsDict = dict()
 jobNumDict = dict()
-builtIns = ['type', 'exit', 'echo', 'pwd', 'complete', 'jobs']
+builtIns = ['type', 'exit', 'echo', 'pwd', 'complete', 'jobs', 'history']
 
 def myParser(arg):
 
@@ -437,7 +437,7 @@ def pipeFunc(paths, cmdName, command, parsed, job):
         '''
 
         for x in range(numOfPipeDelims+1):
-            #THERE HAS TO BE A BETTER WAY TO DO THIS I AM JUST MESSING SOMETHING UP AND DONT SEE IT.
+            #THERE HAS TO BE A BETTER WAY TO DO THIS I AM JUST MESSING SOMETHING UP AND DONT SEE IT. sadly it worked and I passed the test lol this is definitely shit ass code though. Using an error to test the proper case seems insane to me lmfaooooo
             try:
                 pipe = parsed.index('|')
                 cmd = parsed[:pipe]
