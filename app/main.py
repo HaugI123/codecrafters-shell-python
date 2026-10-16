@@ -8,6 +8,7 @@ dictKey = dict()
 jobsDict = dict()
 jobNumDict = dict()
 builtIns = ['type', 'exit', 'echo', 'pwd', 'complete', 'jobs', 'history']
+historyList = []
 
 def myParser(arg):
 
@@ -445,11 +446,14 @@ def pipeFunc(paths, cmdName, command, parsed, job):
                 cmd = parsed
                 if cmd[0] in builtIns:
                     cmdToRun(paths, cmd[0], command, cmd, job)
+                    historyList.append(cmd)
                     return
 
             p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stdin=output)
             output = p.stdout
             parsed = parsed[pipe+1:]
+
+            historyList.append(cmd)
 
         if '|' not in parsed:
             for line in p.stdout:
@@ -473,6 +477,8 @@ def pipeFunc(paths, cmdName, command, parsed, job):
         p2 = subprocess.Popen(cmd2, stdin=p.stdout, stdout=subprocess.PIPE)
         p.stdout.close()
 
+        historyList.append(cmd1)
+        historyList.append(cmd2)
 
         #iterate over stdout for second command, write lines as they become available. Decode with utf-8 because it returns as bytes. Remove from buffer after writing
         for line in p2.stdout:
@@ -493,6 +499,9 @@ def cmdToRun(paths, cmdName, command, parsed, job):
         cmdName = 'jobs'
     elif '|' in parsed:
         cmdName = 'pipe'
+
+    if cmdName != 'pipe' and cmdName != 'history':
+        historyList.append(command+'\n')
 
     match cmdName:
         case 'pipe':
@@ -517,11 +526,16 @@ def cmdToRun(paths, cmdName, command, parsed, job):
             completeFunc(parsed)
         case 'jobs':
             job = jobFunc(parsed, job, command)
+        case 'history':
+            historyFunc()
         case _:
             runProg(paths, cmdName, command, parsed)
 
     return job
 
+def historyFunc():
+    for count,cmd in enumerate(historyList):
+        sys.stdout.write(f'{count+1} {cmd}')
 
 def main():
 
