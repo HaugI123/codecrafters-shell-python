@@ -535,7 +535,7 @@ def cmdToRun(paths, cmdName, command, parsed, job):
 
 def historyFunc(n):
     for count,cmd in enumerate(historyList[n:]):
-        sys.stdout.write(f'{count+1} {cmd}')
+        sys.stdout.write(f'{count+n} {cmd}')
 
 def main():
 
