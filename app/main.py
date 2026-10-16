@@ -527,7 +527,7 @@ def cmdToRun(paths, cmdName, command, parsed, job):
         case 'jobs':
             job = jobFunc(parsed, job, command)
         case 'history':
-            historyFunc(int(parsed[1])
+            historyFunc(int(parsed[1]))
         case _:
             runProg(paths, cmdName, command, parsed)
 
