@@ -9,7 +9,7 @@ jobsDict = dict()
 jobNumDict = dict()
 builtIns = ['type', 'exit', 'echo', 'pwd', 'complete', 'jobs', 'history']
 historyList = []
-if os.environ['HISTFILE']:
+if os.getenv('HISTFILE'):
     with open(os.environ['HISTFILE'], 'r') as txt:
         for line in txt.readlines():
             historyList.append(line)
