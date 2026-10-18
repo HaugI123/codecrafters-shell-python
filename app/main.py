@@ -574,8 +574,6 @@ def historyFunc(parsed, index):
                 for cmd in historyList[index:]:
                     txt.write(cmd)
             index = len(historyList)-1
-            if index>0:
-                print(index)
             return index
 
     n = int(parsed[1]) if len(parsed)>1 and parsed[1].isdigit() else 0
