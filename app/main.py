@@ -560,6 +560,7 @@ def historyFunc(parsed):
 
     if len(parsed)>1 and parsed[1] == '-a':
             #-a flag is for appending most recent commands ran since last -a flag. Currently it sounds like I should give the -a flag its own list that is a deep copy of the history list but that seems inefficient. I do think it would work though. Nvm i think it would work but cant find the right spot to "copy" the historyList. I really think grabbing old output stream data now would be fantastic. I may have figured out how to get the list to "work" but idk if its best case
+            global copyHistList
             histFile = Path(parsed[-1])
             with open(histFile, 'a') as txt:
                 for cmd in copyHistList:
