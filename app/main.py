@@ -548,15 +548,18 @@ def historyFunc(parsed):
         #Says -w flag is to write commands from memory to the hirsty file so the opposite of what I already have? Iterate over the historyList and write lines to fileName ? Seems like it will implement that and test
         histFile = Path(parsed[-1])
         with open(histFile, 'a') as txt:
-            for cmd in copyHistList:
+            for cmd in historyList:
                 txt.write(cmd)
-                copyHistList.remove(cmd)
                 #Might be wrong maybe writelines we shall see: this implementation worked ! I wonder how the "inteded" solution is supposed to look. Loop through old output streams and write that data to a file after parsing it? Is that possible? I guess that is possible with the history command implementation that has been done thus far but I've only been able to do it with lists so idk how it would work without saving the data in code is that what they mean by save it in memory? Write it directly into the code?
         return
 
     if len(parsed)>1 and parsed[1] == '-a':
             #-a flag is for appending most recent commands ran since last -a flag. Currently it sounds like I should give the -a flag its own list that is a deep copy of the history list but that seems inefficient. I do think it would work though.
             histFile = Path(parsed[-1])
+            with open(histFile, 'a') as txt:
+                for cmd in copyHistList:
+                    txt.write(cmd)
+                    copyHistList.remove(value)
 
 
     n = int(parsed[1]) if len(parsed)>1 and parsed[1].isdigit() else 0
