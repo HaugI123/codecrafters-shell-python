@@ -542,6 +542,15 @@ def historyFunc(parsed):
             for line in txt.readlines():
                 historyList.append(line)
         return
+
+    if len(parsed)>1 and parsed[1] == '-w':
+        #Says -w flag is to write commands from memory to the hirsty file so the opposite of what I already have? Iterate over the historyList and write lines to fileName ? Seems like it will implement that and test
+        histFile = Path(parsed[-1])
+        with open(histFile, 'a') as txt:
+            for cmd in historyList:
+                txt.write(cmd) #Might be wrong maybe writelines we shall see
+        return
+
     n = int(parsed[1]) if len(parsed)>1 and parsed[1].isdigit() else 0
     if n>0:
         tempHistList = historyList[-n:]
