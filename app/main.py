@@ -558,8 +558,8 @@ def historyFunc(parsed):
             histFile = Path(parsed[-1])
             with open(histFile, 'a') as txt:
                 for cmd in copyHistList:
-                    txt.writelines(cmd)
-                    copyHistList.remove(value)
+                    txt.write(cmd)
+                    copyHistList.remove(cmd)
             return
 
     n = int(parsed[1]) if len(parsed)>1 and parsed[1].isdigit() else 0
