@@ -560,7 +560,7 @@ def historyFunc(parsed):
                 for cmd in copyHistList:
                     txt.write(cmd)
                     copyHistList.remove(value)
-
+            return
 
     n = int(parsed[1]) if len(parsed)>1 and parsed[1].isdigit() else 0
     if n>0:
