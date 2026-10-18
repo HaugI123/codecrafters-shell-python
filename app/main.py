@@ -502,7 +502,7 @@ def pipeFunc(paths, cmdName, command, parsed, job):
 
     return
 
-def cmdToRun(paths, cmdName, command, parsed, job, *, index):
+def cmdToRun(paths, cmdName, command, parsed, job, index=len(historyList)):
     if any(st in parsed for st in ('>', '1>', '2>')):
         cmdName = 'redirect'
     elif any(st in parsed for st in ('>>', '1>>', '2>>')):
@@ -613,7 +613,7 @@ def main():
                         for cmd in historyList:
                             txt.write(cmd)
                 break
-            job, index = cmdToRun(paths, cmdName, command, parsed, job, index=index)
+            job, index = cmdToRun(paths, cmdName, command, parsed, job, index)
 
     pass
 
