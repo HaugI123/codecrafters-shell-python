@@ -9,7 +9,7 @@ jobsDict = dict()
 jobNumDict = dict()
 builtIns = ['type', 'exit', 'echo', 'pwd', 'complete', 'jobs', 'history']
 historyList = []
-copyHistList = [x for x in historyList]
+copyHistList =[]
 
 def myParser(arg):
 
@@ -448,6 +448,7 @@ def pipeFunc(paths, cmdName, command, parsed, job):
                 if cmd[0] in builtIns:
                     cmdToRun(paths, cmd[0], command, cmd, job)
                     historyList.append(cmd)
+                    copyHistList.append(cmd)
                     return
 
             p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stdin=output)
@@ -455,6 +456,7 @@ def pipeFunc(paths, cmdName, command, parsed, job):
             parsed = parsed[pipe+1:]
 
             historyList.append(cmd)
+            copyHistList.append(cmd)
 
         if '|' not in parsed:
             for line in p.stdout:
@@ -480,6 +482,8 @@ def pipeFunc(paths, cmdName, command, parsed, job):
 
         historyList.append(cmd1)
         historyList.append(cmd2)
+        copyHistList.append(cmd1)
+        copyHistList.append(cmd2)
 
         #iterate over stdout for second command, write lines as they become available. Decode with utf-8 because it returns as bytes. Remove from buffer after writing
         for line in p2.stdout:
@@ -503,6 +507,7 @@ def cmdToRun(paths, cmdName, command, parsed, job):
 
     if cmdName != 'pipe':
         historyList.append(command+'\n')
+        copyHistList.append(command+'\n')
 
     match cmdName:
         case 'pipe':
@@ -554,12 +559,13 @@ def historyFunc(parsed):
         return
 
     if len(parsed)>1 and parsed[1] == '-a':
-            #-a flag is for appending most recent commands ran since last -a flag. Currently it sounds like I should give the -a flag its own list that is a deep copy of the history list but that seems inefficient. I do think it would work though.
+            #-a flag is for appending most recent commands ran since last -a flag. Currently it sounds like I should give the -a flag its own list that is a deep copy of the history list but that seems inefficient. I do think it would work though. Nvm i think it would work but cant find the right spot to "copy" the historyList. I really think grabbing old output stream data now would be fantastic. I may have figured out how to get the list to "work" but idk if its best case
             histFile = Path(parsed[-1])
             with open(histFile, 'a') as txt:
                 for cmd in copyHistList:
                     txt.write(cmd)
                     copyHistList.remove(cmd)
+            copyHistList = []
             return
 
     n = int(parsed[1]) if len(parsed)>1 and parsed[1].isdigit() else 0
