@@ -502,7 +502,7 @@ def pipeFunc(paths, cmdName, command, parsed, job):
 
     return
 
-def cmdToRun(paths, cmdName, command, parsed, job, index):
+def cmdToRun(paths, cmdName, command, parsed, job, *, index):
     if any(st in parsed for st in ('>', '1>', '2>')):
         cmdName = 'redirect'
     elif any(st in parsed for st in ('>>', '1>>', '2>>')):
