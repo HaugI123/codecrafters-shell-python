@@ -558,7 +558,7 @@ def historyFunc(parsed):
             histFile = Path(parsed[-1])
             with open(histFile, 'a') as txt:
                 for cmd in copyHistList:
-                    txt.write(cmd)
+                    txt.writelines(cmd)
                     copyHistList.remove(value)
             return
 
