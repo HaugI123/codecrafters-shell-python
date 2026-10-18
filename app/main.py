@@ -9,8 +9,10 @@ jobsDict = dict()
 jobNumDict = dict()
 builtIns = ['type', 'exit', 'echo', 'pwd', 'complete', 'jobs', 'history']
 historyList = []
-copyHistList =[]
-HISTFILE = ''
+if os.environ['HISTFILE']:
+    with open(os.environ['HISTFILE'], 'r') as txt:
+        for line in txt.readlines():
+            historyList.append(line)
 
 def myParser(arg):
 
@@ -503,8 +505,7 @@ def pipeFunc(paths, cmdName, command, parsed, job):
 
     return
 
-def cmdToRun(paths, cmdName, command, parsed, job):
-    global HISTFILE
+def cmdToRun(paths, cmdName, command, parsed, job, index):
     if any(st in parsed for st in ('>', '1>', '2>')):
         cmdName = 'redirect'
     elif any(st in parsed for st in ('>>', '1>>', '2>>')):
@@ -516,7 +517,6 @@ def cmdToRun(paths, cmdName, command, parsed, job):
 
     if cmdName != 'pipe':
         historyList.append(command+'\n')
-        copyHistList.append(command+'\n')
 
     match cmdName:
         case 'pipe':
@@ -542,26 +542,16 @@ def cmdToRun(paths, cmdName, command, parsed, job):
         case 'jobs':
             job = jobFunc(parsed, job, command)
         case 'history':
-            historyFunc(parsed)
-        case 'HISTFILE':
-            HISTFILE = parsed[-1]
-            historyFunc(parsed)
+            index = historyFunc(parsed, index)
         case _:
             runProg(paths, cmdName, command, parsed)
 
     return job
 
-def historyFunc(parsed):
+def historyFunc(parsed, index):
 
-    global copyHistList
+    #I dont think I understand environment variables HISTFILE was never ran in the terminal so it failed since he exported it. Supposed to be an easy task but idk how to get env variables to work. Is that as simple as pythons env import thing? But I dont see how it can import the 'export HISTFILE=/tmp/banana.txt' ran by codecrafters. Gonna have to look more into how to work with environment variables and what they are. As of rn I have no clue. On stage 66 of 76 though. Oh wait I think im tripping lol the idea is read history on startup I think I should be running this code in the main whitespace not inside of a function. Its literally gonna be the exact 3 if statements below but on the HISTFILE env variable. All I have to do is learn how to pull that.
 
-
-    if HISTFILE:
-        with open(HISTFILE, 'r') as txt:
-            for line in txt.readlines():
-                historyList.append(line)
-                copyHistList.append(line)
-        return
     #This implements the n flag for history, returns every command from n to end of history list. Automatically passed control P / up arrow implementation because readline automatically includes it. Cool I guess but I would like to implement something like that myself in the future version. Idea for how I would do it normally: check for keypad up press (find out how to do that in python) if keypad up is pressed edit current line/stream with the last item in historyList. Find way to reverse iterate over historyList could use historyList.reverse() I think or something like that or find a way to iterate like x = -1 historyList[-1] then x = -2 historyList[-2] ... etc until hit the length of historyList. Down arrow navigation also auto passed. Probably gonna be like that for the next few testing items. Will notate them all here: up arrow, down arrow, execute commands from history? (if you stop at a command with up/down arrow and press enter the command executes properly), that was it for the time being.
     if len(parsed)>1 and parsed[1] == '-r':
         #It says -r flag is used to read history from a file. Dont see the benefit of that unless its considered a "log" for someone to audit in the future
@@ -569,26 +559,24 @@ def historyFunc(parsed):
         with open(histFile, 'r') as txt:
             for line in txt.readlines():
                 historyList.append(line)
-                copyHistList.append(line)
         return
 
     if len(parsed)>1 and parsed[1] == '-w':
         #Says -w flag is to write commands from memory to the hirsty file so the opposite of what I already have? Iterate over the historyList and write lines to fileName ? Seems like it will implement that and test
         histFile = Path(parsed[-1])
-        with open(histFile, 'a') as txt:
+        with open(histFile, 'w') as txt:
             for cmd in historyList:
                 txt.write(cmd)
                 #This implementation worked ! I wonder how the "intended" solution is supposed to look. Loop through old output streams and write that data to a file after parsing it? Is that possible? I guess that is possible with the history command implementation that has been done thus far but I've only been able to do it with lists so idk how it would work without saving the data in code is that what they mean by save it in memory? Write it directly into the code?
         return
 
     if len(parsed)>1 and parsed[1] == '-a':
-            #-a flag is for appending most recent commands ran since last -a flag. Currently it sounds like I should give the -a flag its own list that is a deep copy of the history list but that seems inefficient. I do think it would work though. Nvm i think it would work but cant find the right spot to "copy" the historyList. I really think grabbing old output stream data now would be fantastic. I may have figured out how to get the list to "work" but idk if its best case. I did figure it out lol need to look up what exactly what Im doing is doing to the computer. Pretty much decided to make a copyHistoryList and make it global, iterate over it per usual and append the values in it to the file, then reset the global list to an empty list. Each time history -a is called copyHistList gets wiped so its like it is doing it fresh. Seems really bad to have 2 lists holding the exact same values though until a condition is met (-a) flag but it works for now.
+            #-a flag is for appending most recent commands ran since last -a flag. Currently it sounds like I should give the -a flag its own list that is a deep copy of the history list but that seems inefficient. I do think it would work though. Nvm i think it would work but cant find the right spot to "copy" the historyList. I really think grabbing old output stream data now would be fantastic. I may have figured out how to get the list to "work" but idk if its best case. I did figure it out lol need to look up what exactly Im doing to the computer. Pretty much decided to make a copyHistoryList and make it global, iterate over it per usual and append the values in it to the file, then reset the global list to an empty list. Each time history -a is called copyHistList gets wiped so its like it is doing it fresh. Seems really bad to have 2 lists holding the exact same values though until a condition is met (-a) flag but it works for now.
             histFile = Path(parsed[-1])
             with open(histFile, 'a') as txt:
-                for cmd in copyHistList:
+                for cmd in historyList[index:]:
                     txt.write(cmd)
-            copyHistList = []
-            return
+            return len(historyList)-1
 
     n = int(parsed[1]) if len(parsed)>1 and parsed[1].isdigit() else 0
     if n>0:
@@ -612,6 +600,7 @@ def main():
     readline.set_completer(customCompleter(vocab))
 
     job = 1
+    index = 0
 
     while True:
         backgroundJobsTest()
@@ -621,12 +610,12 @@ def main():
         if parsed:
             cmdName = parsed[0]
             if cmdName == 'exit':
-                if HISTFILE:
-                    with open(HISTFILE, 'w') as txt:
+                if os.environ['HISTFILE']:
+                    with open(os.environ['HISTFILE'], 'w') as txt:
                         for cmd in historyList:
                             txt.write(cmd)
                 break
-            job = cmdToRun(paths, cmdName, command, parsed, job)
+            job = cmdToRun(paths, cmdName, command, parsed, job, index)
 
     pass
 
