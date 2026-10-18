@@ -537,7 +537,6 @@ def historyFunc(parsed):
     #This implements the n flag for history, returns every command from n to end of history list. Automatically passed control P / up arrow implementation because readline automatically includes it. Cool I guess but I would like to implement something like that myself in the future version. Idea for how I would do it normally: check for keypad up press (find out how to do that in python) if keypad up is pressed edit current line/stream with the last item in historyList. Find way to reverse iterate over historyList could use historyList.reverse() I think or something like that or find a way to iterate like x = -1 historyList[-1] then x = -2 historyList[-2] ... etc until hit the length of historyList. Down arrow navigation also auto passed. Probably gonna be like that for the next few testing items. Will notate them all here: up arrow, down arrow, execute commands from history? (if you stop at a command with up/down arrow and press enter the command executes properly), that was it for the time being.
     if len(parsed)>1 and parsed[1] == '-r':
         #It says -r flag is used to read history from a file. Dont see the benefit of that unless its considered a "log" for someone to audit in the future
-        historyList.append(f'history -r {parsed[-1]}')
         histFile = Path(parsed[-1])
         with open(histFile, 'r') as txt:
             for line in txt.readlines():
