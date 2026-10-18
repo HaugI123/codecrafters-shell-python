@@ -573,9 +573,8 @@ def historyFunc(parsed, index):
             with open(histFile, 'a') as txt:
                 for cmd in historyList[index:]:
                     txt.write(cmd)
-            if index>0:
-                print(index)
-            return (len(historyList)-1)
+            index = len(historyList-1)
+            return index
 
     n = int(parsed[1]) if len(parsed)>1 and parsed[1].isdigit() else 0
     if n>0:
