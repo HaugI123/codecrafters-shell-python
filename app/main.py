@@ -540,6 +540,7 @@ def cmdToRun(paths, cmdName, command, parsed, job, index):
             job = jobFunc(parsed, job, command)
         case 'history':
             index = historyFunc(parsed, index)
+            print(index)
         case _:
             runProg(paths, cmdName, command, parsed)
 
