@@ -540,7 +540,6 @@ def cmdToRun(paths, cmdName, command, parsed, job, index):
             job = jobFunc(parsed, job, command)
         case 'history':
             index = historyFunc(parsed, index)
-            print(index)
         case _:
             runProg(paths, cmdName, command, parsed)
 
@@ -574,6 +573,7 @@ def historyFunc(parsed, index):
             with open(histFile, 'a') as txt:
                 for cmd in historyList[index:]:
                     txt.write(cmd)
+            print(index)
             return (len(historyList)-1)
 
     n = int(parsed[1]) if len(parsed)>1 and parsed[1].isdigit() else 0
