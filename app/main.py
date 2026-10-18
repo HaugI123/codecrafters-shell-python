@@ -458,7 +458,6 @@ def pipeFunc(paths, cmdName, command, parsed, job):
                 if cmd[0] in builtIns:
                     cmdToRun(paths, cmd[0], command, cmd, job)
                     historyList.append(cmd)
-                    copyHistList.append(cmd)
                     return
 
             p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stdin=output)
@@ -466,7 +465,6 @@ def pipeFunc(paths, cmdName, command, parsed, job):
             parsed = parsed[pipe+1:]
 
             historyList.append(cmd)
-            copyHistList.append(cmd)
 
         if '|' not in parsed:
             for line in p.stdout:
@@ -492,8 +490,7 @@ def pipeFunc(paths, cmdName, command, parsed, job):
 
         historyList.append(cmd1)
         historyList.append(cmd2)
-        copyHistList.append(cmd1)
-        copyHistList.append(cmd2)
+
 
         #iterate over stdout for second command, write lines as they become available. Decode with utf-8 because it returns as bytes. Remove from buffer after writing
         for line in p2.stdout:
@@ -574,7 +571,7 @@ def historyFunc(parsed, index):
             #-a flag is for appending most recent commands ran since last -a flag. Currently it sounds like I should give the -a flag its own list that is a deep copy of the history list but that seems inefficient. I do think it would work though. Nvm i think it would work but cant find the right spot to "copy" the historyList. I really think grabbing old output stream data now would be fantastic. I may have figured out how to get the list to "work" but idk if its best case. I did figure it out lol need to look up what exactly Im doing to the computer. Pretty much decided to make a copyHistoryList and make it global, iterate over it per usual and append the values in it to the file, then reset the global list to an empty list. Each time history -a is called copyHistList gets wiped so its like it is doing it fresh. Seems really bad to have 2 lists holding the exact same values though until a condition is met (-a) flag but it works for now.
             histFile = Path(parsed[-1])
             with open(histFile, 'a') as txt:
-                for cmd in historyList[index:]:
+                for cmd in historyList[index+1:]:
                     txt.write(cmd)
             return len(historyList)-1
 
