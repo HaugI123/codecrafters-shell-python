@@ -538,6 +538,7 @@ def historyFunc(parsed):
     if len(parsed)>1 and parsed[1] == '-r':
         #It says -r flag is used to read history from a file. Dont see the benefit of that unless its considered a "log" for someone to audit in the future
         histFile = Path(parsed[-1])
+        print(parsed[-1])
         with histFile.open('r', 'utf-8') as txt:
             for line in txt.readlines():
                 print(line)
