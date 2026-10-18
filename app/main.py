@@ -7,7 +7,7 @@ from pathlib import Path
 dictKey = dict()
 jobsDict = dict()
 jobNumDict = dict()
-builtIns = ['type', 'exit', 'echo', 'pwd', 'complete', 'jobs', 'history']
+builtIns = ['type', 'exit', 'echo', 'pwd', 'complete', 'jobs', 'history', 'declare']
 historyList = []
 if os.getenv('HISTFILE'):
     with open(os.environ['HISTFILE'], 'r') as txt:
@@ -606,11 +606,12 @@ def main():
         if parsed:
             cmdName = parsed[0]
             if cmdName == 'exit':
-                if os.getenv('HISTFILE'):
+                if os.getenv('HISTFILE'): #Showcase 2 different ways to access environment variables, os.getenv('ENVNAME') returns none if it doesnt exist, os.environ[] throws an error. Kept both here to showcase when they can be useful/show preference on them. I do wonder how they work under the hood.
                     with open(os.environ['HISTFILE'], 'w') as txt:
                         for cmd in historyList:
                             txt.write(cmd)
                         txt.write('exit\n')
+                        #Passed the append on exit task but its because I am completely rewriting from memory every single time on exit. It "looks" like it appends but its just a full rewrite so nothing is missing. Will change that to be more efficient later on but for now is considered passed.
                 break
             job, index = cmdToRun(paths, cmdName, command, parsed, job, index)
 
