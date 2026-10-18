@@ -608,7 +608,7 @@ def main():
         if parsed:
             cmdName = parsed[0]
             if cmdName == 'exit':
-                if os.environ['HISTFILE']:
+                if os.getenv('HISTFILE'):
                     with open(os.environ['HISTFILE'], 'w') as txt:
                         for cmd in historyList:
                             txt.write(cmd)
@@ -616,6 +616,7 @@ def main():
             job, index = cmdToRun(paths, cmdName, command, parsed, job, index)
 
     pass
+
 
 
 if __name__ == "__main__":
