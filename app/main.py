@@ -520,8 +520,6 @@ def cmdToRun(paths, cmdName, command, parsed, job, index=len(historyList)):
             pipeFunc(paths, cmdName, command, parsed, job)
         case 'echo':
             echoFunc(parsed)
-        case 'exit':
-            exit
         case 'type':
             typeFunc(builtIns, parsed[1], paths)
         case 'pwd':
@@ -612,6 +610,7 @@ def main():
                     with open(os.environ['HISTFILE'], 'w') as txt:
                         for cmd in historyList:
                             txt.write(cmd)
+                        txt.write('exit\n')
                 break
             job, index = cmdToRun(paths, cmdName, command, parsed, job, index)
 
