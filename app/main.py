@@ -613,7 +613,7 @@ def main():
                         for cmd in historyList:
                             txt.write(cmd)
                 break
-            job, index = cmdToRun(paths, cmdName, command, parsed, job, index)
+            job, index = cmdToRun(paths, cmdName, command, parsed, job, index=index)
 
     pass
 
