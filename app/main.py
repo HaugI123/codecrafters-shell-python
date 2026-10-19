@@ -587,7 +587,15 @@ def historyFunc(parsed, index):
         sys.stdout.write(f'{count} {cmd}')
 
 def declareFunc(parsed):
+    #okay looks like declare is about writing environment variables in the shell and accessing them. For declaring a variable I search my parsed string for an '=' if it is there then I find the index of the '=' and assign the environment variable of index-1 to the value index+1. Seems easy and simple enough assuming thats the only flags in declare command that use =. for -p flag, (missed what it said its use it), I just test if the final value in my parsed list (would be the value after -p flag) exists as an envVar, if it does send its value to stdout with a custom print statement. If it doesnt write the default exception handling "not found"
+    if '=' in parsed:
+        ind = parsed.index('=')
+        os.environ[f'{parsed[ind-1]}'] = parsed[ind+1]
+
     if parsed[1] == '-p':
+        if os.getenv(f'{parsed[-1]}'):
+            sys.stdout.write(f'declare -- {parsed[-1]}="{os.getenv(f'{parsed[-1]}')}"\n')
+            return
         sys.stdout.write(f'declare: {parsed[-1]}: not found\n')
 
 
