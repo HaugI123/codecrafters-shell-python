@@ -588,15 +588,15 @@ def historyFunc(parsed, index):
 
 def declareFunc(parsed):
     #okay looks like declare is about writing environment variables in the shell and accessing them. For declaring a variable I search my parsed string for an '=' if it is there then I find the index of the '=' and assign the environment variable of index-1 to the value index+1. Seems easy and simple enough assuming thats the only flags in declare command that use =. for -p flag, (missed what it said its use it), I just test if the final value in my parsed list (would be the value after -p flag) exists as an envVar, if it does send its value to stdout with a custom print statement. If it doesnt write the default exception handling "not found"
+    invalid = False
     if '=' in parsed:
         ind = parsed.index('=')
         for x in parsed[ind-1]:
-            if (ord(x) < 48 and ord(x) > 57 and ord(x) < 65) or (ord(x) > 90 and ord(x) < 97 and ord(x) != 95 and ord(x) > 122):
+            if (ord(x) < 48 or (ord(x) > 57 and ord(x) < 65)) or ((ord(x) > 90 and ord(x) < 97 and ord(x) != 95) or ord(x) > 122):
                 invalid = True
         if (ord(parsed[ind-1][0]) >= 48 and ord(parsed[ind-1][0]) <= 57) or invalid:
             string = parsed[ind-1] + parsed[ind] + parsed[ind+1]
             sys.stdout.write(f"declare: `{string}': not a valid identifier\n")
-            invalid = False
             return
         os.environ[f'{parsed[ind-1]}'] = parsed[ind+1]
 
