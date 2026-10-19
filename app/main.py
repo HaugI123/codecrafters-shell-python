@@ -538,6 +538,8 @@ def cmdToRun(paths, cmdName, command, parsed, job, index=len(historyList)):
             job = jobFunc(parsed, job, command)
         case 'history':
             index = historyFunc(parsed, index)
+        case 'declare':
+            declareFunc(parsed)
         case _:
             runProg(paths, cmdName, command, parsed)
 
