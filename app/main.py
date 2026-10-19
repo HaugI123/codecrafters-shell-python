@@ -82,6 +82,10 @@ def echoFunc(parsed):
     tempStr = ''
     finParsed = []
 
+    if len(parsed) == 1:
+        sys.stdout.write('')
+        return
+
     for i, string in enumerate(parsed):
 
         if i == 0:
@@ -626,6 +630,8 @@ def main():
         job = jobNumUpdater(job)
         command = input("$ ")
         parsed = myParser(command)
+        parsed = [string if not os.getenv(string.replace('$', '')) else os.getenv(string.replace('$', '')) for string in parsed]
+        #list comprehension to test if $<envVar> was in parsed if it is pull the value and update parsed to be the envVar.
         if parsed:
             cmdName = parsed[0]
             if cmdName == 'exit':
