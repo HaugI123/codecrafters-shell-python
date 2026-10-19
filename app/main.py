@@ -26,6 +26,20 @@ def myParser(arg):
 
     for i, char in enumerate(arg):
 
+        #Really wish I remembered what I was doing with this parser man, so hard to tell. Both additions I added '=' and '$' Ive had to use methods that arent really keeping in line with the "following the input stack" philosophy b/c I cant remember what I wanted to achieve. Anyway '=' works for now so I just add everything in tempStr to the endList before the =, manually append an '=' and append all the values in the list after '=' using slicing and indexing then breaking out of the loop. Same idea for '$' feels like cheating but its hard to make adjustments to previous code ideas when I cant sit here and understand what I was going for lol.
+        if char == '$':
+            newList = arg.split('$')
+            newList = newList[1:]
+            for x in newList:
+                val = os.getenv(x)
+                if val:
+                    tempStr += val
+                else:
+                    tempStr += '$' + x
+            endList.append(tempStr)
+            tempStr=''
+            break
+
         if char == '=':
             endList.append(tempStr)
             endList.append('=')
@@ -630,8 +644,7 @@ def main():
         job = jobNumUpdater(job)
         command = input("$ ")
         parsed = myParser(command)
-        parsed = [string if not os.getenv(string.replace('$', '')) else os.getenv(string.replace('$', '')) for string in parsed]
-        #list comprehension to test if $<envVar> was in parsed if it is pull the value and update parsed to be the envVar.
+        #list comprehension to test if $<envVar> was in parsed if it is pull the value and update parsed to be the envVar. going to remove it and change it inside parsed not here. Got the test wrong doesnt update inside the line.
         if parsed:
             cmdName = parsed[0]
             if cmdName == 'exit':
