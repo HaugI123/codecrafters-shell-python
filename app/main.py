@@ -588,7 +588,7 @@ def historyFunc(parsed, index):
 
 def declareFunc(parsed):
     if parsed[1] == '-p':
-        sys.stdout.write(f'declare: {parsed[-1]}: not found')
+        sys.stdout.write(f'declare: {parsed[-1]}: not found\n')
 
 
 def main():
