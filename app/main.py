@@ -584,6 +584,11 @@ def historyFunc(parsed, index):
     for count,cmd in enumerate(tempHistList, start=start+1):
         sys.stdout.write(f'{count} {cmd}')
 
+def declareFunc(parsed):
+    if parsed[1] == '-p':
+        sys.stdout.write(f'declare: {parsed[-1]}: not found')
+
+
 def main():
 
     paths = os.environ['PATH'].split(':')
