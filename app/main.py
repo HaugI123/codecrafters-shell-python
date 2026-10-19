@@ -31,7 +31,11 @@ def myParser(arg):
             newList = arg.split('$')
             newList = newList[1:]
             for x in newList:
-                val = os.getenv(x)
+                if ' ' in x:
+                    tempX = x[:x.index(' ')]
+                    val = os.getenv(tempX) + x[x.index(' '):]
+                else:
+                    val = os.getenv(x)
                 if val:
                     tempStr += val
                 else:
