@@ -14,68 +14,76 @@ if os.getenv('HISTFILE'):
         for line in txt.readlines():
             historyList.append(line)
 
+
 def myParser(arg):
 
-    skip = False
-    specState = False
-    specChars = ["'", '"']
-    stepChar = ''
+    # State flags that control how the current character is interpreted.
+    skip = False       # Skip a character already handled by an escape.
+    specState = False  # True while inside single or double quotes.
+    envState = False #True when $<> symbol is read. Used to process environment variable arguments
+    midArgState = False #Used to test whether when the $ is read it is in the middle of an argument or not
 
-    tempStr = ''
-    endList = []
+    specChars = ["'", '"']
+    stepChar = ''      # Remembers which quote opened the quoted section.
+
+    tempStr = ''       # Builds the current argument one character at a time.
+    endList = []       # Stores completed arguments in order.
+    secondStr = ''
 
     for i, char in enumerate(arg):
 
-        #Really wish I remembered what I was doing with this parser man, so hard to tell. Both additions I added '=' and '$' Ive had to use methods that arent really keeping in line with the "following the input stack" philosophy b/c I cant remember what I wanted to achieve. Anyway '=' works for now so I just add everything in tempStr to the endList before the =, manually append an '=' and append all the values in the list after '=' using slicing and indexing then breaking out of the loop. Same idea for '$' feels like cheating but its hard to make adjustments to previous code ideas when I cant sit here and understand what I was going for lol.
+        if envState:
+            if midArgState:
+                secondStr += char if char != '$' else ''
+                if char == ' ' or i == len(arg):
+                    endList.append(os.getenv(secondStr))
+                    midArgState = ''
+                    continue
+            if char == ' ' or i == len(arg):
+                endList.append(os.getenv(tempStr.replace('$', '')))
+                tempStr = ''
+                continue
+
         if char == '$':
-            newList = arg.split('$')
-            newList = newList[1:]
-            for x in newList:
-                if ' ' in x:
-                    tempX = x[:x.index(' ')]
-                    val = os.getenv(tempX) + x[x.index(' '):]
-                else:
-                    val = os.getenv(x)
-                if val:
-                    tempStr += val
-                else:
-                    tempStr += '$' + x
-            endList.append(tempStr)
-            tempStr=''
-            break
+            envState = True
+            if arg[char-1].isalpha():
+                midArgState = True
 
-        if char == '=':
-            endList.append(tempStr)
-            endList.append('=')
-            endList.append(arg[arg.index('=')+1:])
-            tempStr = ''
-            break
-
+        # Handle a character that was already processed by a backslash.
+        # This prevents the escaped character from being added twice.
         if skip:
             skip = False
             continue
 
+        # An opening quote starts a quoted section.
+        # The quote itself is syntax, so it is not added to tempStr.
         if char in specChars and not specState:
             specState = True
             stepChar = char
             continue
 
+        # A matching closing quote ends the quoted section.
+        # Quotes of the other type are treated as ordinary characters.
         if specState and char == stepChar:
             specState = False
             continue
 
+        # Outside quotes, a space ends the current argument.
+        # Inside quotes, spaces are part of the argument.
         if char == " " and not specState:
             if tempStr:
                 endList.append(tempStr)
                 tempStr = ''
             continue
 
+        # Handle backslash escaping, except inside single quotes.
         if ord(char) == 92 and stepChar != "'":
             nextChar = arg[i+1]
             skip = True
 
+            # Inside double quotes, only certain characters are escaped
+            # specially by the shell. These cases remove the backslash.
             if specState and stepChar == '"':
-
                 match nextChar:
                     case '"':
                         tempStr += nextChar
@@ -84,16 +92,22 @@ def myParser(arg):
                         tempStr += '\\'
                         continue
 
+            # Outside double quotes, preserve the next character
+            # literally and skip processing it on the next iteration.
             tempStr += nextChar
 
-
+        # Add ordinary characters to the argument.
+        # Do not add a backslash that has already been handled.
         if ord(char) != 92 or stepChar == "'":
             tempStr += char
 
+    # The final argument has no trailing space to trigger the normal
+    # argument-ending logic, so append it after the loop.
     if tempStr:
         endList.append(tempStr)
 
     return endList
+
 
 def echoFunc(parsed):
 
