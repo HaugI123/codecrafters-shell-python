@@ -46,7 +46,7 @@ def myParser(arg):
 
         if char == '$':
             envState = True
-            if arg[char-1].isalpha():
+            if arg[i-1].isalpha():
                 midArgState = True
 
         # Handle a character that was already processed by a backslash.
