@@ -153,8 +153,6 @@ def myParser(arg):
 
 def echoFunc(parsed):
 
-    print(parsed)
-
     tempStr = ''
     finParsed = []
 
