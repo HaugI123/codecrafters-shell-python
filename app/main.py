@@ -32,17 +32,59 @@ def myParser(arg):
 
     for i, char in enumerate(arg):
 
+        if char == '=':
+            endList.append(tempStr)
+            endList.append('=')
+            endList.append(arg[arg.index('=')+1:])
+            tempStr = ''
+            break
+
+
         if envState:
             if midArgState:
-                secondStr += char if char != '$' else ''
-                if char == ' ' or i == len(arg):
-                    endList.append(os.getenv(secondStr))
-                    midArgState = ''
+                secondStr += char
+                if char == ' ':
+                    tempStr = tempStr.split('$')[0]
+                    value = os.getenv(secondStr.strip())
+                    if value is None:
+                        endList.append(tempStr + '$' + secondStr)
+                    else:
+                        endList.append(tempStr + value)
+                    midArgState = False
+                    envState = False
+                    secondStr = ''
+                    tempStr = ''
                     continue
-            if char == ' ' or i == len(arg):
-                endList.append(os.getenv(tempStr.replace('$', '')))
+                elif i+1 == len(arg):
+                    tempStr = tempStr.split('$')[0]
+                    value = os.getenv(secondStr)
+                    if value is None:
+                        endList.append(tempStr + '$' + secondStr)
+                    else:
+                        endList.append(tempStr + value)
+                    midArgState = False
+                    envState = False
+                    secondStr = ''
+                    tempStr = ''
+                    break
+            if char == ' ':
+                value = os.getenv(tempStr.replace('$', ''))
+                if value is None:
+                    endList.append(tempStr)
+                else:
+                    endList.append(value)
                 tempStr = ''
+                envState = False
                 continue
+            elif i+1 == len(arg):
+                tempStr += char
+                value = os.getenv(tempStr.replace('$', ''))
+                if value is None:
+                    endList.append(tempStr)
+                else:
+                    endList.append(value)
+                tempStr = ''
+                break
 
         if char == '$':
             envState = True
@@ -110,6 +152,8 @@ def myParser(arg):
 
 
 def echoFunc(parsed):
+
+    print(parsed)
 
     tempStr = ''
     finParsed = []
