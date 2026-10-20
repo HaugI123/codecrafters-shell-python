@@ -88,7 +88,7 @@ def myParser(arg):
 
         if char == '$':
             envState = True
-            if arg[i-1].isalpha():
+            if validChar(arg[i-1]):
                 midArgState = True
 
         # Handle a character that was already processed by a backslash.
@@ -686,6 +686,12 @@ def declareFunc(parsed):
             return
         sys.stdout.write(f'declare: {parsed[-1]}: not found\n')
 
+def validChar(string):
+    for x in string:
+        if (ord(x) < 48 or (ord(x) > 57 and ord(x) < 65)) or ((ord(x) > 90 and ord(x) < 97 and ord(x) != 95) or ord(x) > 122):
+            return False
+        else:
+            return True
 
 def main():
 
