@@ -53,7 +53,7 @@ def myParser(arg):
                 value = os.getenv(secondStr)
                 tempStr = tempStr.replace('$', '')
                 if value is None:
-                    tempStr += '\n'
+                    tempStr += ''
                 else:
                     tempStr += value
                 curlyState = False
