@@ -22,6 +22,7 @@ def myParser(arg):
     specState = False  # True while inside single or double quotes.
     envState = False #True when $<> symbol is read. Used to process environment variable arguments
     midArgState = False #Used to test whether when the $ is read it is in the middle of an argument or not
+    curlyState = False
 
     specChars = ["'", '"']
     stepChar = ''      # Remembers which quote opened the quoted section.
@@ -32,6 +33,7 @@ def myParser(arg):
 
     for i, char in enumerate(arg):
 
+        #Equal in argument logic, a little rough around the edges just say if there is an = sign add what was already parsed to the list, add an = to the list, and add everything from index(=) to the end to the list. Works fine if you're only assigning a single value but if multiple = signs are there wont function properly will be buggy.
         if char == '=':
             endList.append(tempStr)
             endList.append('=')
@@ -39,8 +41,25 @@ def myParser(arg):
             tempStr = ''
             break
 
-
+        #Test if the state is an envvironment variable state call, $ is in the argument. If it is there is differing logic for each mode. If curly braces exist after the $ does normal parsing without the {} and passes the environment variable from the values inside the closing curly braces. If $ exists in the middle of an argument he$llo it attempts to parse the variable $llo and append it to he and pass that as the argument. If no env variable exists just returns the argument as is. Last is base logic for testing env variable used across middle argument and standard space calls. Ends the argument when it sees a space or the end of the line.
         if envState:
+            if char == '{' and arg[i-1] == '$':
+                curlyState = True
+                continue
+            if curlyState and char != '}':
+                secondStr += char
+                continue
+            if curlyState and char == '}':
+                value = os.getenv(secondStr)
+                tempStr = tempStr.replace('$', '')
+                if value is None:
+                    tempStr += '\n'
+                else:
+                    tempStr += value
+                curlyState = False
+                envState = False
+                secondStr = ''
+                continue
             if midArgState:
                 secondStr += char
                 if char == ' ':
@@ -86,10 +105,12 @@ def myParser(arg):
                 tempStr = ''
                 break
 
+        #If current character is $ set environment state to True. If the previous character is a valid variable naming character (tested via a different function) then midArgState is also true.
         if char == '$':
             envState = True
             if validChar(arg[i-1]):
                 midArgState = True
+
 
         # Handle a character that was already processed by a backslash.
         # This prevents the escaped character from being added twice.
