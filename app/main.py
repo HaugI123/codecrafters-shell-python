@@ -66,7 +66,7 @@ def myParser(arg):
                     tempStr = tempStr.split('$')[0]
                     value = os.getenv(secondStr.strip())
                     if value is None:
-                        endList.append(tempStr + '$' + secondStr)
+                        endList.append(tempStr) #Last spot I believe should be changed right?
                     else:
                         endList.append(tempStr + value)
                     midArgState = False
@@ -78,7 +78,7 @@ def myParser(arg):
                     tempStr = tempStr.split('$')[0]
                     value = os.getenv(secondStr)
                     if value is None:
-                        endList.append(tempStr + '$' + secondStr)
+                        endList.append(tempStr) #LOL you can see it here how I was developing it to be like that kek. Same change tempStr to ''. My logic below wont add tempStr to endList. Only adds if tempStr: and setting tempStr to '' should fix that right?
                     else:
                         endList.append(tempStr + value)
                     midArgState = False
@@ -88,9 +88,7 @@ def myParser(arg):
                     break
             if char == ' ':
                 value = os.getenv(tempStr.replace('$', ''))
-                if value is None:
-                    endList.append(tempStr)
-                else:
+                if value is not None:
                     endList.append(value)
                 tempStr = ''
                 envState = False
@@ -98,15 +96,13 @@ def myParser(arg):
             elif i+1 == len(arg):
                 tempStr += char
                 value = os.getenv(tempStr.replace('$', ''))
-                if value is None:
-                    endList.append(tempStr)
-                else:
+                if value is not None:
                     endList.append(value)
                 tempStr = ''
                 break
 
         #If current character is $ set environment state to True. If the previous character is a valid variable naming character (tested via a different function) then midArgState is also true.
-        if char == '$':
+        if char == '$' and not specState:
             envState = True
             if validChar(arg[i-1]):
                 midArgState = True
